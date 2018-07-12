@@ -1,0 +1,351 @@
+swagger: '2.0'
+info:
+  title: COFFEE-ROCKET-SERVICE
+  description: A service that provides coffee bean rockets, bean planets, and other things the coffeeverse has to offer.
+  version: '1.0'
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: svenbayer.blog
+schemes:
+  - https
+  - http
+basePath: /coffee-rocket-service/v1.0
+paths:
+  /takeoff:
+    post:
+      x-ignore: false
+      summary: Sends a coffee rocket to a bean planet and returns the bean planet.
+      tags:
+      - takeoff
+      - coffee
+      - bean
+      - rocket
+      description: API endpoint to send a coffee rocket to a bean planet and returns the bean planet.
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: coffeeRocket
+          description: coffeeRocket
+          required: true
+          schema:
+            $ref: '#/definitions/CoffeeRocket'
+        - in: query
+          name: withWormhole
+          description: withWormhole
+          required: true
+          type: boolean
+        - in: query
+          name: viaHyperLoop
+          description: viaHyperLoop
+          required: true
+          type: boolean
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+          x-example: "123456"
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-RateLimit-Limit:
+              type: integer
+              description: Request limit per hour.
+          schema:
+            $ref: '#/definitions/BeanPlanet'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /land:
+    post:
+      summary: Landing coffee rocket
+      tags:
+        - land
+      description: Lands a coffee rocket on a bean planet and returns the coffee rocket.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: beanPlanet
+          description: beanPlanet
+          required: true
+          schema:
+            $ref: '#/definitions/BeanPlanet'
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/CoffeeRocket'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/find/planets/{solarSystem}':
+    get:
+      description: Find planets in the given Solar System.
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: solarSystem
+          in: path
+          description: bean solar system
+          required: true
+          type: string
+        - name: planetName
+          in: query
+          required: false
+          type: string
+        - name: numAsteroids
+          in: query
+          required: true
+          type: number
+        - name: minSize
+          in: query
+          required: true
+          type: number
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BeanPlanet'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/planets/{planet}/asteroids/{asteroidName}':
+    get:
+      description: Retrieve existing bean asteroids from a bean planet.
+      produces:
+        - '*/*'
+      parameters:
+        - name: planet
+          in: path
+          description: bean planet
+          required: true
+          type: string
+        - name: asteroidName
+          in: path
+          description: bean asteroid name
+          required: true
+          type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BeanAsteroid'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    post:
+      description: Adds a bean asteroids to a bean planet.
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: planet
+          in: path
+          description: bean planet
+          required: true
+          type: string
+        - name: asteroidName
+          in: path
+          description: bean asteroid name
+          required: true
+          type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+        - in: body
+          name: beanAsteroid
+          description: bean asteroid
+          required: true
+          schema:
+            $ref: '#/definitions/BeanAsteroid'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BeanSpaceLocation'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    put:
+      description: Updates an existing bean asteroids of a bean planet.
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: planet
+          in: path
+          description: bean planet
+          required: true
+          type: string
+        - name: asteroidName
+          in: path
+          description: bean asteroid name
+          required: true
+          type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+        - in: body
+          name: beanAsteroid
+          description: bean asteroid
+          required: true
+          schema:
+            $ref: '#/definitions/BeanAsteroid'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BeanSpaceLocation'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      description: Removes an existing bean asteroids from a bean planet.
+      produces:
+        - '*/*'
+      parameters:
+        - name: planet
+          in: path
+          description: bean planet
+          required: true
+          type: string
+        - name: asteroidName
+          in: path
+          description: bean asteroid name
+          required: true
+          type: string
+          pattern: "[a-z]+"
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+definitions:
+  BeanSpaceLocation:
+    type: object
+    properties:
+      x:
+        type: number
+      y:
+        type: number
+    title: BeanSpaceLocation
+  Beanonaut:
+    type: object
+    properties:
+      name:
+        type: string
+      age:
+        type: number
+    title: Beanonaut
+  BeanItinerary:
+    type: object
+    properties:
+      departure:
+        type: string
+      destination:
+        type: string
+    title: BeanItinerary
+  CoffeeRocket:
+    type: object
+    properties:
+      rocketName:
+        type: string
+      itinerary:
+        $ref: '#/definitions/BeanItinerary'
+      fuel:
+        type: number
+        format: double
+      weight:
+        type: number
+        format: double
+      beanonauts:
+        type: array
+        items:
+          $ref: '#/definitions/Beanonaut'
+    title: CoffeeRocket
+  BeanPlanet:
+    type: object
+    properties:
+      name:
+        type: string
+      size:
+        type: number
+      asteroids:
+        type: array
+        items:
+          $ref: '#/definitions/BeanAsteroid'
+    title: BeanPlanet
+  BeanAsteroid:
+    type: object
+    properties:
+      name:
+        type: string
+      speed:
+        type: number
+      shape:
+        type: string
+        enum:
+          - 'ROUND'
+          - 'SQUARE'
+          - 'BEAN'
+    title: BeanAsteroids

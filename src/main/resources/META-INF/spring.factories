@@ -1,0 +1,2 @@
+org.springframework.cloud.contract.spec.ContractConverter=\
+de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.SwaggerContractConverter
