@@ -96,6 +96,8 @@ definitions:
       weight:
         type: number
         format: double
+      boxes:
+        type: array
       beanonauts:
         type: array
         items:
