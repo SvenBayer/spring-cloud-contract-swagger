@@ -2,6 +2,9 @@ package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.jayway.jsonpath.Configuration
+import com.jayway.jsonpath.JsonPath
+import com.jayway.jsonpath.Option
 import groovy.transform.CompileStatic
 import io.swagger.models.Model
 import io.swagger.models.Response
@@ -11,12 +14,12 @@ import io.swagger.models.properties.*
 import io.swagger.parser.SwaggerParser
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.cloud.contract.spec.ContractConverter
-import org.springframework.cloud.contract.spec.internal.ClientDslProperty
 import org.springframework.cloud.contract.spec.internal.DslProperty
 import org.springframework.cloud.contract.spec.internal.MatchingType
 import org.springframework.cloud.contract.spec.internal.MatchingTypeValue
 
 import java.util.regex.Pattern
+import java.util.stream.Collectors
 
 /**
  * @author Sven Bayer
@@ -79,6 +82,10 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
 									Object value = createValueForRequestBodyParameter(bodyParameter, swagger.definitions)
 									body(value)
 									// TODO body matcher
+                                    /*bodyMatchers {
+                                        Map<String, MatchingTypeValue> jsonPaths = createJsonPathsForBodyParameter(bodyParameter, swagger.definitions)
+                                        jsonPath()
+                                    }*/
 								}
 							}
 						}
@@ -129,7 +136,6 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
 		} else if (response.vendorExtensions?.get("x-example")) {
 			rawValue = response.vendorExtensions.get("x-example")
 		} else if (response.responseSchema) {
-			// TODO this might not work for Models that reference other models
 			def reference = response.getResponseSchema().reference
 			rawValue = getJsonForPropertiesConstruct(reference, definitions)
 		} else {
@@ -194,10 +200,12 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
 				if (numericPropertyValue?.longValue() != null) {
 					return numericPropertyValue.longValue()
 				} else {
-					return 1
+                    return 1
+					//TODO return Pattern.compile("[0-9]+")
 				}
 			}
-			return 1
+            return 1
+			//TODO return Pattern.compile("[0-9]+")
 		}
 		if (property instanceof StringProperty) {
 			StringProperty stringProperty = StringProperty.cast(property)
@@ -206,6 +214,7 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
 			}
 		}
         return key
+        //TODO return new MatchingTypeValue(MatchingType.REGEX, ".+")
 	}
 
 	private Object postFormatNumericValue(Property property, Object value) {
@@ -241,6 +250,7 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
 
     private String createValueForRequestBodyParameter(BodyParameter param, Map<String, Model> definitions) {
         Object rawValue
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
         // TODO this is not verified
         if (param.examples?.entrySet()?.getAt(0)?.value != null) {
             rawValue = param.examples.entrySet().getAt(0).value
@@ -258,13 +268,41 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
                 rawValue = param.schema.vendorExtensions.get("x-example")
             } else {
                 def reference = param.schema.reference
-                rawValue = getJsonForPropertiesConstruct(reference, definitions)
+                Map<?, ?> jsonMap = getJsonForPropertiesConstruct(reference, definitions)
+
+                String result = mapper.writeValueAsString(jsonMap)
+                List<String> s = getJsonPaths(result)
+
+                return result
             }
         } else {
             throw new IllegalStateException("Could not parse body for request")
         }
-        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
         return mapper.writeValueAsString(rawValue)
+    }
+
+    /*Map<List<String>, MatchingTypeValue> getJsonMatchers(Map<List<String>, Object> jsonMap) {
+        jsonMap.entrySet().stream()
+                .map{
+            if (it.value instanceof LinkedHashMap) {
+                LinkedHashMap<String, Object> subMap = LinkedHashMap.cast(it.value)
+                final String key = it.key
+                Map<List<String>, Object> will = subMap.entrySet().stream()
+                    .map{
+                    [ [key, it.key ], it.value ]
+                }
+                .collect(Collectors.toMap(Map.Entry.getKey(), Map.Entry.getValue()))
+            } else {
+                return [ it.key, new MatchingTypeValue(MatchingType.EQUALITY, it.value) ]
+            }
+        } as Map<List<String>, MatchingTypeValue>
+    }*/
+
+    List<String> getJsonPaths(String json) {
+        Configuration conf = Configuration.builder().options(Option.AS_PATH_LIST).build()
+        String paths = JsonPath.using(conf).parse(json).read("\$..*")
+        String[] pathArray = paths.substring(2, paths.size() - 2).split("\",\"")
+        return Arrays.asList(pathArray)
     }
 
 	private DslProperty createDslValueForParameter(AbstractSerializableParameter param) {
@@ -313,27 +351,31 @@ class SwaggerContractConverter implements ContractConverter<Swagger> {
 		return null
 	}
 
-    public Pattern createPatternForDefaultValue(AbstractSerializableParameter param) {
-        String type = param.type
-        String format = param.format
-
-        String regex;
-
-        if ("string".equals(type)) {
-            regex = ".+"
-        } else if (("number".equals(type)) && ("double".equals(format) || "float".equals(format))) {
-            regex = "[0-9]+\\.[0-9]+"
-        } else if ("number".equals(type)) {
-            regex =  "[0-9]+"
-        } else if ("boolean".equals(type)) {
-            regex = "(true|false)"
-        } else {
-            regex = ".+"
-        }
+    private Pattern createPatternForDefaultValue(AbstractSerializableParameter param) {
+        String regex = createRegexForDefaultValue(param)
         return Pattern.compile(regex)
     }
 
-	private Object createDefaultValueForType(AbstractSerializableParameter param) {
+    private String createRegexForDefaultValue(AbstractSerializableParameter param) {
+        String type = param.type
+        String format = param.format
+
+        if ("string".equals(type)) {
+            return ".+"
+        }
+        if (("number".equals(type)) && ("double".equals(format) || "float".equals(format))) {
+            return "[0-9]+\\.[0-9]+"
+        }
+        if ("number".equals(type)) {
+            return "[0-9]+"
+        }
+        if ("boolean".equals(type)) {
+            return "(true|false)"
+        }
+        return ".+"
+    }
+
+    private Object createDefaultValueForType(AbstractSerializableParameter param) {
 		String type = param.type
 		String format = param.format
 

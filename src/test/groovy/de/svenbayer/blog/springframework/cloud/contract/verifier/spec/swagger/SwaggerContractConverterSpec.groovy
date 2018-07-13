@@ -3,6 +3,8 @@ package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger
 import io.swagger.models.Swagger
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.cloud.contract.spec.internal.DslProperty
+import org.springframework.cloud.contract.spec.internal.MatchingType
+import org.springframework.cloud.contract.spec.internal.MatchingTypeValue
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -14,6 +16,50 @@ import java.util.regex.Pattern
 class SwaggerContractConverterSpec extends Specification {
 
     @Subject SwaggerContractConverter converter = new SwaggerContractConverter()
+
+    def "should convert json map to map of json paths with values"() {
+        given:
+            Map<?, ?> jsonMap = new HashMap<>()
+            jsonMap.put("rocketName", new MatchingTypeValue(MatchingType.REGEX, ".+"))
+
+            Map<?, ?> itineraryJsonMap = new HashMap<>()
+            itineraryJsonMap.put("departure", new MatchingTypeValue(MatchingType.REGEX, ".+"))
+            itineraryJsonMap.put("destination", new MatchingTypeValue(MatchingType.REGEX, ".+"))
+            jsonMap.put("itinerary", itineraryJsonMap)
+
+            jsonMap.put("fuel", "1.1")
+            jsonMap.put("weight", "1.1")
+
+            Map<?, ?> beanonautsJsonMap = new HashMap<>()
+            beanonautsJsonMap.put("name", new MatchingTypeValue(MatchingType.REGEX, ".+"))
+            beanonautsJsonMap.put("age", new MatchingTypeValue(MatchingType.REGEX, "[0-9]+"))
+            jsonMap.put(beanonautsJsonMap)
+        when:
+            Map<String, Object> jsonMatchers = converter.getJsonMatchers(jsonMap)
+        then:
+            jsonMatchers == [ "\$['rocketName']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['itinerary']['departure']": new MatchingTypeValue(MatchingType.REGEX, ".+") ]
+    }
+
+    def "should convert json to json paths"() {
+        given:
+            String json = "{\n" +
+                    "  \"rocketName\" : \"rocketName\",\n" +
+                    "  \"itinerary\" : {\n" +
+                    "    \"departure\" : \"departure\",\n" +
+                    "    \"destination\" : \"destination\"\n" +
+                    "  },\n" +
+                    "  \"fuel\" : 1.1,\n" +
+                    "  \"weight\" : 1.1,\n" +
+                    "  \"beanonauts\" : [ {\n" +
+                    "    \"name\" : \"name\",\n" +
+                    "    \"age\" : 1\n" +
+                    "  } ]\n" +
+                    "}";
+        when:
+            List<String> paths = converter.getJsonPaths(json)
+        then:
+            paths == [ "\$['rocketName']", "\$['itinerary']", "\$['fuel']", "\$['weight']", "\$['beanonauts']", "\$['itinerary']['departure']", "\$['itinerary']['destination']", "\$['beanonauts'][0]", "\$['beanonauts'][0]['name']", "\$['beanonauts'][0]['age']" ]
+    }
 
     def "should accept yaml files that are swagger files"() {
         given:
