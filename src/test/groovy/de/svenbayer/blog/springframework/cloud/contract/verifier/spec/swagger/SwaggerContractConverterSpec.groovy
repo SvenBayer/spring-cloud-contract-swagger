@@ -39,31 +39,9 @@ class SwaggerContractConverterSpec extends Specification {
             beanonautsJsonList.add(beanonautsJsonMap)
             jsonMap.put("beanonauts", beanonautsJsonList)
         when:
-            Map<String, Object> result = converter.getFlattenedJsonProperties(jsonMap)
+            Map<String, Object> result = JsonPathMatchingBuilder.getJsonPathsWithValues(jsonMap)
         then:
-            result == [ "boxes": 1, "rocketName": new MatchingTypeValue(MatchingType.REGEX, ".+"), "departure": new MatchingTypeValue(MatchingType.REGEX, ".+"), "destination": new MatchingTypeValue(MatchingType.REGEX, ".+"), "fuel": new MatchingTypeValue(MatchingType.EQUALITY, "1.1"), "weight": new MatchingTypeValue(MatchingType.EQUALITY, "1.1"), "name": new MatchingTypeValue(MatchingType.REGEX, ".+"), "age": new MatchingTypeValue(MatchingType.REGEX, "[0-9]+") ]
-    }
-
-    def "should convert json to json paths"() {
-        given:
-        String json = "{\n" +
-                "  \"rocketName\" : \"rocketName\",\n" +
-                "  \"boxes\" : 1\",\n" +
-                "  \"itinerary\" : {\n" +
-                "    \"departure\" : \"departure\",\n" +
-                "    \"destination\" : \"destination\"\n" +
-                "  },\n" +
-                "  \"fuel\" : 1.1,\n" +
-                "  \"weight\" : 1.1,\n" +
-                "  \"beanonauts\" : [ {\n" +
-                "    \"name\" : \"name\",\n" +
-                "    \"age\" : 1\n" +
-                "  } ]\n" +
-                "}";
-        when:
-        List<String> paths = converter.getJsonPaths(json)
-        then:
-        paths == [ "\$['rocketName']", "\$['boxes']", "\$['fuel']", "\$['weight']", "\$['itinerary']['departure']", "\$['itinerary']['destination']", "\$['beanonauts'][0]['name']", "\$['beanonauts'][0]['age']" ]
+            result == [ "\$['boxes'][*]": 1, "\$['rocketName']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['departure']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['destination']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['fuel']": new MatchingTypeValue(MatchingType.EQUALITY, "1.1"), "\$['weight']": new MatchingTypeValue(MatchingType.EQUALITY, "1.1"), "\$['beanonauts'][*]['name']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['beanonauts'][*]['age']": new MatchingTypeValue(MatchingType.REGEX, "[0-9]+") ]
     }
 
     def "should accept yaml files that are swagger files"() {
