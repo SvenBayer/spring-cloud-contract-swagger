@@ -17,33 +17,6 @@ class SwaggerContractConverterSpec extends Specification {
 
     @Subject SwaggerContractConverter converter = new SwaggerContractConverter()
 
-    def "should convert json map to map with list of deepest keys and values"() {
-        given:
-            Map<String, Object> jsonMap = new HashMap<>()
-            jsonMap.put("rocketName", new MatchingTypeValue(MatchingType.REGEX, ".+"))
-
-            jsonMap.put("boxes", new ArrayList(Collections.singletonList(1)))
-
-            Map<?, ?> itineraryJsonMap = new HashMap<>()
-            itineraryJsonMap.put("departure", new MatchingTypeValue(MatchingType.REGEX, ".+"))
-            itineraryJsonMap.put("destination", new MatchingTypeValue(MatchingType.REGEX, ".+"))
-            jsonMap.put("itinerary", itineraryJsonMap)
-
-            jsonMap.put("fuel", new MatchingTypeValue(MatchingType.EQUALITY, "1.1"))
-            jsonMap.put("weight", new MatchingTypeValue(MatchingType.EQUALITY, "1.1"))
-
-            Map<?, ?> beanonautsJsonMap = new HashMap<>()
-            beanonautsJsonMap.put("name", new MatchingTypeValue(MatchingType.REGEX, ".+"))
-            beanonautsJsonMap.put("age", new MatchingTypeValue(MatchingType.REGEX, "[0-9]+"))
-            List<?> beanonautsJsonList = new ArrayList<>()
-            beanonautsJsonList.add(beanonautsJsonMap)
-            jsonMap.put("beanonauts", beanonautsJsonList)
-        when:
-            Map<String, Object> result = JsonPathMatchingBuilder.getJsonPathsWithValues(jsonMap)
-        then:
-            result == [ "\$['boxes'][*]": 1, "\$['rocketName']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['departure']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['destination']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['fuel']": new MatchingTypeValue(MatchingType.EQUALITY, "1.1"), "\$['weight']": new MatchingTypeValue(MatchingType.EQUALITY, "1.1"), "\$['beanonauts'][*]['name']": new MatchingTypeValue(MatchingType.REGEX, ".+"), "\$['beanonauts'][*]['age']": new MatchingTypeValue(MatchingType.REGEX, "[0-9]+") ]
-    }
-
     def "should accept yaml files that are swagger files"() {
         given:
             File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/single_swagger.yml").toURI())

@@ -1,25 +1,36 @@
 package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger;
 
+import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.DslValueBuilder;
+import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.RequestBodyParamBuilder;
+import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.ResponseBodyBuilder;
+import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.ValuePropertyBuilder;
 import groovy.lang.Closure;
-import io.swagger.models.*;
+import io.swagger.models.HttpMethod;
+import io.swagger.models.Operation;
 import io.swagger.models.Response;
+import io.swagger.models.Swagger;
 import io.swagger.models.parameters.*;
-import io.swagger.models.parameters.QueryParameter;
-import io.swagger.models.properties.*;
 import io.swagger.parser.SwaggerParser;
 import org.springframework.cloud.contract.spec.Contract;
 import org.springframework.cloud.contract.spec.ContractConverter;
-import org.springframework.cloud.contract.spec.internal.*;
+import org.springframework.cloud.contract.spec.internal.DslProperty;
+import org.springframework.cloud.contract.spec.internal.Headers;
+import org.springframework.cloud.contract.spec.internal.QueryParameters;
+import org.springframework.cloud.contract.spec.internal.Request;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.X_IGNORE;
 
 /**
  * @author Sven Bayer
  */
-public class SwaggerContractConverter implements ContractConverter<Swagger> {
+public final class SwaggerContractConverter implements ContractConverter<Swagger> {
 
 	@Override
 	public boolean isAccepted(File file) {
@@ -70,7 +81,7 @@ public class SwaggerContractConverter implements ContractConverter<Swagger> {
 			contract.setName(operation.getSummary());
 		}
 		contract.setPriority(priority.getAndIncrement());
-		if (operation.getVendorExtensions() != null && "true".equals(operation.getVendorExtensions().get("x-ignore"))) {
+		if (operation.getVendorExtensions() != null && "true".equals(operation.getVendorExtensions().get(X_IGNORE.getField()))) {
 			contract.setIgnored(true);
 		}
 		return operation;
@@ -123,7 +134,6 @@ public class SwaggerContractConverter implements ContractConverter<Swagger> {
 				operation.getParameters().stream()
 						.filter(param -> param instanceof QueryParameter || param instanceof PathParameter)
 						.map(AbstractSerializableParameter.class::cast)
-						//TODO maybe collect as map first and then set it
 						.forEach(param -> queryParameters.parameter(param.getName(), DslValueBuilder.createDslValueForParameter(param)));
 			}
 		}
@@ -147,12 +157,6 @@ public class SwaggerContractConverter implements ContractConverter<Swagger> {
 					if (value != null) {
 						request.body(value);
 					}
-					/*BodyMatchers bodyMatchers = new BodyMatchers();
-					Map<String, MatchingTypeValue> jsonPaths = RequestBodyMatchingBuilder.createValueForRequestBodyParameter(bodyParameter, swagger.getDefinitions());
-					for (Map.Entry<String, MatchingTypeValue> entry : jsonPaths.entrySet()) {
-						bodyMatchers.jsonPath(entry.getKey(), entry.getValue());
-					}
-					request.setBodyMatchers(bodyMatchers);*/
 				}
 			});
 		}

@@ -17,7 +17,23 @@
     <name>Spring Cloud Contract Swagger</name>
     <description>Spring Cloud Contract Swagger</description>
 
+    <url>https://github.com/SvenBayer/spring-cloud-contract-swagger</url>
+
     <inceptionYear>2018</inceptionYear>
+
+    <developers>
+        <developer>
+            <id>SvenBayer</id>
+            <name>Sven Bayer</name>
+            <email>svenbayer.blog@gmail.com</email>
+            <url>https://svenbayer.blog</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <spring-cloud.version>Finchley.M2</spring-cloud.version>
+        <spring-cloud-contract.version>2.0.1.BUILD-SNAPSHOT</spring-cloud-contract.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -105,11 +121,80 @@
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-contract-dependencies</artifactId>
-                <version>2.0.1.BUILD-SNAPSHOT</version>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>spring</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>spring-snapshots</id>
+                    <name>Spring Snapshots</name>
+                    <url>http://repo.spring.io/libs-snapshot-local</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>spring-milestones</id>
+                    <name>Spring Milestones</name>
+                    <url>http://repo.spring.io/libs-milestone-local</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>spring-releases</id>
+                    <name>Spring Releases</name>
+                    <url>http://repo.spring.io/release</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>spring-snapshots</id>
+                    <name>Spring Snapshots</name>
+                    <url>http://repo.spring.io/libs-snapshot-local</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>spring-milestones</id>
+                    <name>Spring Milestones</name>
+                    <url>http://repo.spring.io/libs-milestone-local</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>spring-plugin-snapshots</id>
+                    <name>Spring Snapshots</name>
+                    <url>http://repo.spring.io/plugins-snapshot-local</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>spring-plugin-milestones</id>
+                    <name>Spring Milestones</name>
+                    <url>http://repo.spring.io/plugins-release-local</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
 </project>
