@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_BOOLEAN;
 import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_FLOAT;
 import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_INT;
 import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.*;
@@ -48,7 +49,7 @@ public final class ValuePropertyBuilder {
 			if (arrayProperty.getItems() == null) {
 				return new ArrayList<>(Collections.singleton(DEFAULT_INT));
 			} else {
-				return new ArrayList<>(Collections.singletonList(createValueForProperty("", arrayProperty.getItems(), definitions)));
+				return new ArrayList<>(Collections.singletonList(createValueForProperty(key, arrayProperty.getItems(), definitions)));
 			}
 		}
 		if (property instanceof AbstractNumericProperty) {
@@ -86,6 +87,9 @@ public final class ValuePropertyBuilder {
 			}
 			return DEFAULT_INT;
 			//TODO return Pattern.compile("[0-9]+");
+		}
+		if (property instanceof BooleanProperty) {
+			return DEFAULT_BOOLEAN;
 		}
 		if (property instanceof StringProperty) {
 			StringProperty stringProperty = StringProperty.class.cast(property);

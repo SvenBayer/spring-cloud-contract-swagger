@@ -54,7 +54,9 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 					String pathLink = pathEntry.getKey();
 					return pathEntry.getValue().getOperationMap().entrySet().stream()
 							.map(operationEntry -> createContract(swagger, priority, pathLink, operationEntry));
-				}).collect(Collectors.toList());
+				})
+				.filter(contract -> !contract.isIgnored())
+				.collect(Collectors.toList());
 	}
 
 	private Contract createContract(Swagger swagger, AtomicInteger priority, String pathLink, Map.Entry<HttpMethod, Operation> operationEntry) {
@@ -81,8 +83,11 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 			contract.setName(operation.getSummary());
 		}
 		contract.setPriority(priority.getAndIncrement());
-		if (operation.getVendorExtensions() != null && "true".equals(operation.getVendorExtensions().get(X_IGNORE.getField()))) {
+		if (operation.getVendorExtensions() != null && operation.getVendorExtensions().get(X_IGNORE.getField()) != null
+				&& Boolean.class.cast(operation.getVendorExtensions().get(X_IGNORE.getField()))) {
 			contract.setIgnored(true);
+		} else {
+			contract.setIgnored(false);
 		}
 		return operation;
 	}
@@ -107,7 +112,13 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 			});
 		}
 		if (operation.getProduces() != null) {
-			operation.getProduces().forEach(responseHeaders::contentType);
+			operation.getProduces().forEach(contentType -> {
+				if (contentType.equals("*/*")) {
+					responseHeaders.contentType("");
+				} else {
+					responseHeaders.contentType(contentType);
+				}
+			});
 		}
 
 		// Cookie parameters are not supported by Swagger 2.0 ?
@@ -129,10 +140,15 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 			request.urlPath(swagger.getBasePath() + pathLink);
 			// We ignore url() for now and only use urlPath
 			if (operation.getParameters() != null) {
+				operation.getParameters().stream()
+						.filter(param -> param instanceof PathParameter)
+						.map(AbstractSerializableParameter.class::cast)
+						//TODO This has to become more advanced! We need to check types so we can use 1 for int32 etc.
+						.forEach(param -> request.urlPath(request.getUrlPath().getClientValue().toString().replace("{" + param.getName() + "}", param.getName())));
 				final QueryParameters queryParameters = new QueryParameters();
 				request.getUrlPath().setQueryParameters(queryParameters);
 				operation.getParameters().stream()
-						.filter(param -> param instanceof QueryParameter || param instanceof PathParameter)
+						.filter(param -> param instanceof QueryParameter)
 						.map(AbstractSerializableParameter.class::cast)
 						.forEach(param -> queryParameters.parameter(param.getName(), DslValueBuilder.createDslValueForParameter(param)));
 			}
@@ -161,7 +177,13 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 			});
 		}
 		if (operation.getConsumes() != null) {
-			operation.getConsumes().forEach(requestHeaders::contentType);
+			operation.getConsumes().forEach(contentType -> {
+				if (contentType.equals("*/*")) {
+					requestHeaders.contentType("");
+				} else {
+					requestHeaders.contentType(contentType);
+				}
+			});
 		}
 	}
 

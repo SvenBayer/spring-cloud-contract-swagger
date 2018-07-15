@@ -6,6 +6,7 @@ import org.springframework.cloud.contract.spec.internal.DslProperty;
 
 import java.util.regex.Pattern;
 
+import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_BOOLEAN;
 import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.*;
 
 /**
@@ -93,7 +94,7 @@ public final class DslValueBuilder {
 			return DefaultValues.DEFAULT_INT;
 		}
 		if (BOOLEAN.getField().equals(type)) {
-			return true;
+			return DEFAULT_BOOLEAN;
 		}
 		return DefaultValues.DEFAULT_INT;
 	}

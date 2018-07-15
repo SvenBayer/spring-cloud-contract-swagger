@@ -66,6 +66,56 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
+  /ignore:
+    post:
+      x-ignore: true
+      summary: Ignore this request!
+      tags:
+      - ignore
+      - request
+      description: API endpoint to be ignored.
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: coffeeRocket
+          description: coffeeRocket
+          required: true
+          schema:
+            $ref: '#/definitions/CoffeeRocket'
+        - in: query
+          name: withWormhole
+          description: withWormhole
+          required: true
+          type: boolean
+        - in: query
+          name: viaHyperLoop
+          description: viaHyperLoop
+          required: true
+          type: boolean
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: false
+          type: string
+          x-example: "123456"
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-RateLimit-Limit:
+              type: integer
+              description: Request limit per hour.
+          schema:
+            $ref: '#/definitions/BeanPlanet'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
   /land:
     post:
       summary: Landing coffee rocket

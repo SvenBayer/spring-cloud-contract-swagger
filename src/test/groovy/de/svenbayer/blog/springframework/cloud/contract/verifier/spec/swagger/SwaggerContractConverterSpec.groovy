@@ -3,8 +3,6 @@ package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger
 import io.swagger.models.Swagger
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.cloud.contract.spec.internal.DslProperty
-import org.springframework.cloud.contract.spec.internal.MatchingType
-import org.springframework.cloud.contract.spec.internal.MatchingTypeValue
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -57,7 +55,7 @@ class SwaggerContractConverterSpec extends Specification {
     "name" : "name",
     "age" : 1
   } ],
-  "boxes" : [ 1 ],
+  "boxes" : [ "boxes" ],
   "fuel" : 1.1,
   "weight" : 1.1,
   "itinerary" : {
@@ -77,10 +75,68 @@ class SwaggerContractConverterSpec extends Specification {
 """{
   "asteroids" : [ {
     "shape" : "ROUND",
+    "aliens" : [ {
+      "heads" : [ "heads" ]
+    } ],
     "name" : "name",
-    "speed" : 1
+    "speed" : 1,
+    "istransparent" : true
   } ],
   "size" : 1,
+  "name" : "name"
+}""")
+                }
+            }
+        when:
+            Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
+        then:
+            contracts.toString() == [expectedContract].toString()
+    }
+
+
+    def "should convert from single swagger with path param to contract"() {
+        given:
+            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/single_pathparam_swagger.yml").toURI())
+            Contract expectedContract = Contract.make {
+                label("takeoff_coffee_bean_rocket")
+                name("Sends a coffee rocket to a bean planet and returns the bean planet.")
+                description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
+                priority(0)
+                request {
+                    method(POST())
+                    urlPath("/coffee-rocket-service/v1.0/takeoff/rocket") {
+                        queryParameters {
+                            parameter("withWormhole", new DslProperty(Pattern.compile("(true|false)"), true))
+                            parameter("viaHyperLoop", new DslProperty(Pattern.compile("(true|false)"), true))
+                        }
+                    }
+                    headers {
+                        header("X-Request-ID", "123456")
+                        contentType(applicationJson())
+                    }
+                    body(
+"""{
+  "beanonauts" : [ {
+    "name" : "name",
+    "age" : 1
+  } ],
+  "boxes" : [ "boxes" ],
+  "fuel" : 1.1,
+  "weight" : 1.1,
+  "itinerary" : {
+    "destination" : "destination",
+    "departure" : "departure"
+  },
+  "rocketName" : "rocketName"
+}""")
+                }
+                response {
+                    status(201)
+                    headers {
+                        contentType(applicationJson())
+                    }
+                    body(
+"""{
   "name" : "name"
 }""")
                 }
@@ -205,7 +261,7 @@ class SwaggerContractConverterSpec extends Specification {
                 label("land")
                 name("Landing coffee rocket")
                 description("Lands a coffee rocket on a bean planet and returns the coffee rocket.")
-                priority(1)
+                priority(2)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/land") {
@@ -250,12 +306,11 @@ class SwaggerContractConverterSpec extends Specification {
             }
             Contract expectedContract2 = Contract.make {
                 description("Find planets in the given Solar System.")
-                priority(2)
+                priority(3)
                 request {
                     method(GET())
-                    urlPath("/coffee-rocket-service/v1.0/find/planets/{solarSystem}") {
+                    urlPath("/coffee-rocket-service/v1.0/find/planets/solarSystem") {
                         queryParameters {
-                            parameter("solarSystem", new DslProperty(Pattern.compile(".+"), "solarSystem"))
                             parameter("planetName", new DslProperty(Pattern.compile(".+"), "planetName"))
                             parameter("numAsteroids", new DslProperty(Pattern.compile("[0-9]+"), 1))
                             parameter("minSize", new DslProperty(Pattern.compile("[0-9]+"), 1))
@@ -285,13 +340,11 @@ class SwaggerContractConverterSpec extends Specification {
             }
             Contract expectedContract3 = Contract.make {
                 description("Retrieve existing bean asteroids from a bean planet.")
-                priority(3)
+                priority(4)
                 request {
                     method(GET())
-                    urlPath("/coffee-rocket-service/v1.0/planets/{planet}/asteroids/{asteroidName}") {
+                    urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
                         queryParameters {
-                            parameter("planet", new DslProperty(Pattern.compile(".+"), "planet"))
-                            parameter("asteroidName", new DslProperty(Pattern.compile(".+"), "asteroidName"))
                         }
                     }
                     headers {
@@ -313,13 +366,11 @@ class SwaggerContractConverterSpec extends Specification {
             }
         Contract expectedContract4 = Contract.make {
             description("Updates an existing bean asteroids of a bean planet.")
-            priority(4)
+            priority(5)
             request {
                 method(PUT())
-                urlPath("/coffee-rocket-service/v1.0/planets/{planet}/asteroids/{asteroidName}") {
+                urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
                     queryParameters {
-                        parameter("planet", new DslProperty(Pattern.compile(".+"), "planet"))
-                        parameter("asteroidName", new DslProperty(Pattern.compile(".+"), "asteroidName"))
                     }
                 }
                 headers {
@@ -347,13 +398,11 @@ class SwaggerContractConverterSpec extends Specification {
         }
             Contract expectedContract5 = Contract.make {
                 description("Adds a bean asteroids to a bean planet.")
-                priority(5)
+                priority(6)
                 request {
                     method(POST())
-                    urlPath("/coffee-rocket-service/v1.0/planets/{planet}/asteroids/{asteroidName}") {
+                    urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
                         queryParameters {
-                            parameter("planet", new DslProperty(Pattern.compile(".+"), "planet"))
-                            parameter("asteroidName", new DslProperty(Pattern.compile(".+"), "asteroidName"))
                         }
                     }
                     headers {
@@ -381,13 +430,11 @@ class SwaggerContractConverterSpec extends Specification {
             }
         Contract expectedContract6 = Contract.make {
                 description("Removes an existing bean asteroids from a bean planet.")
-                priority(6)
+                priority(7)
                 request {
                     method(DELETE())
-                    urlPath("/coffee-rocket-service/v1.0/planets/{planet}/asteroids/{asteroidName}") {
+                    urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
                         queryParameters {
-                            parameter("planet", new DslProperty(Pattern.compile(".+"), "planet"))
-                            parameter("asteroidName", new DslProperty(Pattern.compile("[a-z]+"), "asteroidName"))
                         }
                     }
                     headers {
