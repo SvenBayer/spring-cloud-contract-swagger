@@ -90,7 +90,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString() == [expectedContract].toString()
+            contracts.toString().normalize() == [expectedContract].toString().normalize()
     }
 
 
@@ -144,7 +144,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString() == [expectedContract].toString()
+            contracts.toString().normalize() == [expectedContract].toString().normalize()
     }
 
     def "should convert from single parametrized swagger to contract"() {
@@ -202,7 +202,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts == [expectedContract]
+            contracts.toString().normalize() == [expectedContract].toString().normalize()
     }
 
     def "should convert from multiple swagger to contract"() {
@@ -452,19 +452,19 @@ class SwaggerContractConverterSpec extends Specification {
             Collection<Contract> contracts = converter.convertFrom(multipleSwaggerYaml)
         then:
             contracts.size() == 7
-            contracts.getAt(0).toString() == expectedContract0.toString()
-            contracts.getAt(1).toString() == expectedContract1.toString()
-            contracts.getAt(2).toString() == expectedContract2.toString()
-            contracts.getAt(3).toString() == expectedContract3.toString()
-            contracts.getAt(4).toString() == expectedContract4.toString()
-            contracts.getAt(5).toString() == expectedContract5.toString()
-            contracts.getAt(6).toString() == expectedContract6.toString()
-            contracts.toString() == [expectedContract0, expectedContract1, expectedContract2, expectedContract3, expectedContract4, expectedContract5, expectedContract6].toString()
+            contracts.getAt(0).toString().normalize() == expectedContract0.toString().normalize()
+            contracts.getAt(1).toString().normalize() == expectedContract1.toString().normalize()
+            contracts.getAt(2).toString().normalize() == expectedContract2.toString().normalize()
+            contracts.getAt(3).toString().normalize() == expectedContract3.toString().normalize()
+            contracts.getAt(4).toString().normalize() == expectedContract4.toString().normalize()
+            contracts.getAt(5).toString().normalize() == expectedContract5.toString().normalize()
+            contracts.getAt(6).toString().normalize() == expectedContract6.toString().normalize()
+            contracts.toString().normalize() == [expectedContract0, expectedContract1, expectedContract2, expectedContract3, expectedContract4, expectedContract5, expectedContract6].toString().normalize()
     }
 
     def "should expect_exception_when_converting_contract_to_swagger"() {
         given:
-            List<Contract> springCloudContracts = new ArrayList<>();
+            List<Contract> springCloudContracts = new ArrayList<>()
         when:
             Swagger swagger = converter.convertTo(springCloudContracts)
         then:

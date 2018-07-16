@@ -24,10 +24,10 @@ public final class ValuePropertyBuilder {
 	public static DslProperty createDslValueForProperty(String key, Property property, Map<String, Model> definitions) {
 		Object value = createValueForProperty(key, property, definitions);
 		//TODO avoid default values and set the pattern for the corresponding type
-		return new DslProperty(String.valueOf(value));
+		return new DslProperty<>(String.valueOf(value));
 	}
 
-	static Object createValueForProperty(String key, Property property, Map<String, Model> definitions) {
+	private static Object createValueForProperty(String key, Property property, Map<String, Model> definitions) {
 		if (property.getExample() != null) {
 			return postFormatNumericValue(property, property.getExample());
 		}
