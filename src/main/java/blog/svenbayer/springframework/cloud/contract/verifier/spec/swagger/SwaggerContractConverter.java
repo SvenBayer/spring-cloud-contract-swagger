@@ -1,9 +1,9 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger;
 
-import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.DslValueBuilder;
-import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.RequestBodyParamBuilder;
-import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.ResponseBodyBuilder;
-import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.ValuePropertyBuilder;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.DslValueBuilder;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.RequestBodyParamBuilder;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.ResponseBodyBuilder;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.ValuePropertyBuilder;
 import groovy.lang.Closure;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.X_IGNORE;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.X_IGNORE;
 
 /**
  * @author Sven Bayer

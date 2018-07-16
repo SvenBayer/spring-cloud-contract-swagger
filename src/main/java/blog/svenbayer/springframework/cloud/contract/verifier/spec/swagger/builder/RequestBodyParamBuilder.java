@@ -5,13 +5,10 @@ import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.value
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.BodyParameter;
 
 import java.util.Map;
-
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.X_EXAMPLE;
 
 /**
  * @author Sven Bayer

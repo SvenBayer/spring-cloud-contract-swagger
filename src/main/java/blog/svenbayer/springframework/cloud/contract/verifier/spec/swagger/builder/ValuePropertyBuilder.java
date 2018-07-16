@@ -11,10 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_BOOLEAN;
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_FLOAT;
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_INT;
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.*;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.*;
 
 /**
  * @author Sven Bayer

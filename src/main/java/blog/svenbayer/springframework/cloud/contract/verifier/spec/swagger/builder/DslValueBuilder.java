@@ -2,14 +2,10 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.buil
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
-import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import org.springframework.cloud.contract.spec.internal.DslProperty;
 
 import java.util.regex.Pattern;
-
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_BOOLEAN;
-import static de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.*;
 
 /**
  * @author Sven Bayer
