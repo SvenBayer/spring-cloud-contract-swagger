@@ -1,4 +1,4 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger;
 
 import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.DslValueBuilder;
 import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder.RequestBodyParamBuilder;

@@ -1,4 +1,4 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.exception;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception;
 
 /**
  * @author Sven Bayer

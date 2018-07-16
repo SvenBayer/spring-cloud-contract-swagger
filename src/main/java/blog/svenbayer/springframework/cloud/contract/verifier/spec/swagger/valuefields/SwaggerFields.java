@@ -1,4 +1,4 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields;
 
 /**
  * @author Sven Bayer

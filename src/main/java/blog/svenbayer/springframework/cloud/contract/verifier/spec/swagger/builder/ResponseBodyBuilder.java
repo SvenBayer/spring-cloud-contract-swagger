@@ -1,5 +1,7 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -23,8 +25,8 @@ public final class ResponseBodyBuilder {
 		Object rawValue;
 		if (response.getExamples() != null && response.getExamples().values().toArray()[0] != null) {
 			rawValue = response.getExamples().values().toArray()[0];
-		} else if (response.getVendorExtensions() != null && response.getVendorExtensions().get(X_EXAMPLE.getField()) != null) {
-			rawValue = response.getVendorExtensions().get(X_EXAMPLE.getField());
+		} else if (response.getVendorExtensions() != null && response.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
+			rawValue = response.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField());
 		} else if (response.getResponseSchema() != null) {
 			String reference = response.getResponseSchema().getReference();
 			rawValue = ValuePropertyBuilder.getJsonForPropertiesConstruct(reference, definitions);

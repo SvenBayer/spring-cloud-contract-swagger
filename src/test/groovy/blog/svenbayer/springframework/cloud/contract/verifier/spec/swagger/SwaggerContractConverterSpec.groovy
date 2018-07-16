@@ -1,4 +1,4 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger
 
 import io.swagger.models.Swagger
 import org.springframework.cloud.contract.spec.Contract

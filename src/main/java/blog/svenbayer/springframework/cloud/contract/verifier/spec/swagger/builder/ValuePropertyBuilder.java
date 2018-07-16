@@ -1,5 +1,6 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import io.swagger.models.Model;
 import io.swagger.models.properties.*;
 import org.springframework.cloud.contract.spec.internal.DslProperty;
@@ -33,8 +34,8 @@ public final class ValuePropertyBuilder {
 		if (property.getExample() != null) {
 			return postFormatNumericValue(property, property.getExample());
 		}
-		if (property.getVendorExtensions() != null && property.getVendorExtensions().get(X_EXAMPLE.getField()) != null) {
-			return postFormatNumericValue(property, property.getVendorExtensions().get(X_EXAMPLE.getField()));
+		if (property.getVendorExtensions() != null && property.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
+			return postFormatNumericValue(property, property.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()));
 		}
 		Object defaultValue = getDefaultValue(property);
 		if (defaultValue != null) {
@@ -111,7 +112,7 @@ public final class ValuePropertyBuilder {
 		if (property.getFormat() == null) {
 			return value;
 		}
-		if (value instanceof Double && (property.getFormat().equals(INT_32.getField()) || property.getFormat().equals(INT_64.getField()))) {
+		if (value instanceof Double && (property.getFormat().equals(SwaggerFields.INT_32.getField()) || property.getFormat().equals(SwaggerFields.INT_64.getField()))) {
 			return Double.class.cast(value).intValue();
 		}
 		return value;

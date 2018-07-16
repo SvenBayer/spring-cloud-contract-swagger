@@ -9,26 +9,38 @@
         <version>2.0.0.RELEASE</version>
     </parent>
 
-    <groupId>de.svenbayer.blog</groupId>
+    <groupId>blog.svenbayer</groupId>
     <artifactId>spring-cloud-contract-swagger</artifactId>
     <version>1.0.0.RELEASE</version>
     <packaging>jar</packaging>
 
-    <name>Spring Cloud Contract Swagger</name>
+    <name>blog.svenbayer:spring-cloud-contract-swagger</name>
     <description>Spring Cloud Contract Swagger</description>
-
     <url>https://github.com/SvenBayer/spring-cloud-contract-swagger</url>
 
     <inceptionYear>2018</inceptionYear>
 
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <developers>
         <developer>
-            <id>SvenBayer</id>
+            <id>svenbayer.blog</id>
             <name>Sven Bayer</name>
             <email>svenbayer.blog@gmail.com</email>
             <url>https://svenbayer.blog</url>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/SvenBayer/spring-cloud-contract-swagger.git</connection>
+        <developerConnection>scm:git:ssh://github.com:SvenBayer/spring-cloud-contract-swagger.git</developerConnection>
+        <url>http://github.com/SvenBayer/spring-cloud-contract-swagger/tree/master</url>
+    </scm>
 
     <properties>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
@@ -153,17 +165,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>

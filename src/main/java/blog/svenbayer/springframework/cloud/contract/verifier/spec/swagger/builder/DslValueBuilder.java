@@ -1,5 +1,7 @@
-package de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.builder;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import de.svenbayer.blog.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import org.springframework.cloud.contract.spec.internal.DslProperty;
@@ -40,8 +42,8 @@ public final class DslValueBuilder {
 		if (param.getExample() != null) {
 			return param.getExample();
 		}
-		if (param.getVendorExtensions() != null && param.getVendorExtensions().get(X_EXAMPLE.getField()) != null) {
-			return param.getVendorExtensions().get(X_EXAMPLE.getField());
+		if (param.getVendorExtensions() != null && param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
+			return param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField());
 		}
 		if (param.getDefaultValue() != null) {
 			return param.getDefaultValue();
@@ -61,16 +63,16 @@ public final class DslValueBuilder {
 		String type = param.getType();
 		String format = param.getFormat();
 
-		if (STRING.getField().equals(type)) {
+		if (SwaggerFields.STRING.getField().equals(type)) {
 			return ".+";
 		}
-		if ((NUMBER.getField().equals(type)) && (DOUBLE.getField().equals(format) || FLOAT.getField().equals(format))) {
+		if ((SwaggerFields.NUMBER.getField().equals(type)) && (SwaggerFields.DOUBLE.getField().equals(format) || SwaggerFields.FLOAT.getField().equals(format))) {
 			return "[0-9]+\\.[0-9]+";
 		}
-		if (NUMBER.getField().equals(type)) {
+		if (SwaggerFields.NUMBER.getField().equals(type)) {
 			return "[0-9]+";
 		}
-		if (BOOLEAN.getField().equals(type)) {
+		if (SwaggerFields.BOOLEAN.getField().equals(type)) {
 			return "(true|false)";
 		}
 		return ".+";
@@ -80,21 +82,21 @@ public final class DslValueBuilder {
 		String type = param.getType();
 		String format = param.getFormat();
 
-		if (STRING.getField().equals(type)) {
+		if (SwaggerFields.STRING.getField().equals(type)) {
 			if (param.getName() != null && !param.getName().isEmpty()) {
 				return param.getName();
 			} else {
-				return STRING.getField();
+				return SwaggerFields.STRING.getField();
 			}
 		}
-		if ((NUMBER.getField().equals(type)) && (DOUBLE.getField().equals(format) || FLOAT.getField().equals(format))) {
+		if ((SwaggerFields.NUMBER.getField().equals(type)) && (SwaggerFields.DOUBLE.getField().equals(format) || SwaggerFields.FLOAT.getField().equals(format))) {
 			return DefaultValues.DEFAULT_FLOAT;
 		}
-		if (NUMBER.getField().equals(type)) {
+		if (SwaggerFields.NUMBER.getField().equals(type)) {
 			return DefaultValues.DEFAULT_INT;
 		}
-		if (BOOLEAN.getField().equals(type)) {
-			return DEFAULT_BOOLEAN;
+		if (SwaggerFields.BOOLEAN.getField().equals(type)) {
+			return DefaultValues.DEFAULT_BOOLEAN;
 		}
 		return DefaultValues.DEFAULT_INT;
 	}
