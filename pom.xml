@@ -45,6 +45,7 @@
     <properties>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
         <spring-cloud-contract.version>2.0.0.RELEASE</spring-cloud-contract.version>
+        <swagger-parser.version>1.0.36</swagger-parser.version>
     </properties>
 
     <dependencies>
@@ -102,7 +103,7 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>1.0.36</version>
+            <version>${swagger-parser.version}</version>
         </dependency>
     </dependencies>
 
