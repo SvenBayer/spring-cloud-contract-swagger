@@ -34,9 +34,9 @@ class SwaggerContractConverterSpec extends Specification {
             File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/single_swagger.yml").toURI())
             Contract expectedContract = Contract.make {
                 label("takeoff_coffee_bean_rocket")
-                name("Sends a coffee rocket to a bean planet and returns the bean planet.")
+                name("1_takeoff_POST")
                 description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
-                priority(0)
+                priority(1)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/takeoff") {
@@ -99,9 +99,9 @@ class SwaggerContractConverterSpec extends Specification {
             File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/single_pathparam_swagger.yml").toURI())
             Contract expectedContract = Contract.make {
                 label("takeoff_coffee_bean_rocket")
-                name("Sends a coffee rocket to a bean planet and returns the bean planet.")
+                name("1_takeoff_rocket_POST")
                 description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
-                priority(0)
+                priority(1)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/takeoff/rocket") {
@@ -152,9 +152,9 @@ class SwaggerContractConverterSpec extends Specification {
             File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/param_swagger.yml").toURI())
             Contract expectedContract = Contract.make {
                 label("takeoff_coffee_bean_rocket")
-                name("Sends a coffee rocket to a bean planet and returns the bean planet.")
+                name("1_takeoff_POST")
                 description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
-                priority(0)
+                priority(1)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/takeoff") {
@@ -210,9 +210,9 @@ class SwaggerContractConverterSpec extends Specification {
             File multipleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/multiple_swagger.yml").toURI())
             Contract expectedContract0 = Contract.make {
                 label("takeoff_coffee_bean_rocket")
-                name("Sends a coffee rocket to a bean planet and returns the bean planet.")
+                name("1_takeoff_POST")
                 description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
-                priority(0)
+                priority(1)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/takeoff") {
@@ -259,9 +259,9 @@ class SwaggerContractConverterSpec extends Specification {
             }
             Contract expectedContract1 = Contract.make {
                 label("land")
-                name("Landing coffee rocket")
+                name("3_land_POST")
                 description("Lands a coffee rocket on a bean planet and returns the coffee rocket.")
-                priority(2)
+                priority(3)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/land") {
@@ -305,8 +305,9 @@ class SwaggerContractConverterSpec extends Specification {
                 }
             }
             Contract expectedContract2 = Contract.make {
+                name("4_find_planets_solarSystem_GET")
                 description("Find planets in the given Solar System.")
-                priority(3)
+                priority(4)
                 request {
                     method(GET())
                     urlPath("/coffee-rocket-service/v1.0/find/planets/solarSystem") {
@@ -339,8 +340,9 @@ class SwaggerContractConverterSpec extends Specification {
                 }
             }
             Contract expectedContract3 = Contract.make {
+                name("5_planets_planet_asteroids_asteroidName_GET")
                 description("Retrieve existing bean asteroids from a bean planet.")
-                priority(4)
+                priority(5)
                 request {
                     method(GET())
                     urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
@@ -365,8 +367,9 @@ class SwaggerContractConverterSpec extends Specification {
                 }
             }
         Contract expectedContract4 = Contract.make {
+            name("6_planets_planet_asteroids_asteroidName_PUT")
             description("Updates an existing bean asteroids of a bean planet.")
-            priority(5)
+            priority(6)
             request {
                 method(PUT())
                 urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
@@ -397,8 +400,9 @@ class SwaggerContractConverterSpec extends Specification {
             }
         }
             Contract expectedContract5 = Contract.make {
+                name("7_planets_planet_asteroids_asteroidName_POST")
                 description("Adds a bean asteroids to a bean planet.")
-                priority(6)
+                priority(7)
                 request {
                     method(POST())
                     urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {
@@ -429,8 +433,9 @@ class SwaggerContractConverterSpec extends Specification {
                 }
             }
         Contract expectedContract6 = Contract.make {
+                name("8_planets_planet_asteroids_asteroidName_DELETE")
                 description("Removes an existing bean asteroids from a bean planet.")
-                priority(7)
+                priority(8)
                 request {
                     method(DELETE())
                     urlPath("/coffee-rocket-service/v1.0/planets/planet/asteroids/asteroidName") {

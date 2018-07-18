@@ -1,9 +1,6 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger;
 
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.DslValueBuilder;
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.RequestBodyParamBuilder;
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.ResponseBodyBuilder;
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.ValuePropertyBuilder;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.*;
 import groovy.lang.Closure;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
@@ -32,6 +29,8 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
  */
 public final class SwaggerContractConverter implements ContractConverter<Swagger> {
 
+	private static final String TAG_SEP = "_";
+
 	@Override
 	public boolean isAccepted(File file) {
 		try {
@@ -48,7 +47,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		if (swagger == null || swagger.getPaths() == null) {
 			return Collections.emptyList();
 		}
-		final AtomicInteger priority = new AtomicInteger();
+		final AtomicInteger priority = new AtomicInteger(1);
 		return swagger.getPaths().entrySet().stream()
 				.flatMap(pathEntry -> {
 					String pathLink = pathEntry.getKey();
@@ -61,7 +60,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 
 	private Contract createContract(Swagger swagger, AtomicInteger priority, String pathLink, Map.Entry<HttpMethod, Operation> operationEntry) {
 		Contract contract = Contract.make(Closure.IDENTITY);
-		Operation operation = createMetaData(priority, operationEntry, contract);
+		Operation operation = createMetaData(priority, pathLink, operationEntry, contract);
 
 		createRequest(swagger, pathLink, operationEntry, contract, operation);
 
@@ -71,17 +70,18 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		return contract;
 	}
 
-	private Operation createMetaData(AtomicInteger priority, Map.Entry<HttpMethod, Operation> operationEntry, Contract contract) {
+	private Operation createMetaData(AtomicInteger priority, String pathLink, Map.Entry<HttpMethod, Operation> operationEntry, Contract contract) {
 		Operation operation = operationEntry.getValue();
+		String contractName = PathLinkBuilder.createContractName(priority, pathLink, operationEntry.getKey());
+		contract.setName(contractName);
+
 		if (operation.getDescription() != null) {
 			contract.description(operation.getDescription());
 		}
 		if (operation.getTags() != null) {
-			contract.setLabel(String.join("_", operation.getTags()));
+			contract.setLabel(String.join(TAG_SEP, operation.getTags()));
 		}
-		if (operation.getSummary() != null) {
-			contract.setName(operation.getSummary());
-		}
+
 		contract.setPriority(priority.getAndIncrement());
 		if (operation.getVendorExtensions() != null && operation.getVendorExtensions().get(X_IGNORE.getField()) != null
 				&& Boolean.class.cast(operation.getVendorExtensions().get(X_IGNORE.getField()))) {

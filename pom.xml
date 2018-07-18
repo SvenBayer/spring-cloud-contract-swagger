@@ -169,6 +169,10 @@
                         </goals>
                     </execution>
                 </executions>
+                <!-- Remove this for releases or find a fancy way to handle this! -->
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
