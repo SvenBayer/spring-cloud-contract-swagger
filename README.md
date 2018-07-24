@@ -13,6 +13,7 @@ To convert a Swagger file to a Spring Cloud Contract and to execute it against a
 For the consumer, add as dependencies the **spring-cloud-starter-contract-stub-runner** and the converter **spring-cloud-contract-swagger**.
 
 ## Behaviour of the Converter
+In the latest release version **2.0.0** of [Spring Cloud Contract](https://github.com/spring-cloud/spring-cloud-contract) the contract files for **Spring Cloud Contract Swagger** have to end with something else then *.yml*. Otherwise, the **YamlConverter** of Spring Cloud Contract will pick them up. You can also avoid this by using the latest snapshot version of Spring Cloud Contract.
 
 ### Default Behaviour
 Currently, **Spring Cloud Contract Swagger** generates default values for a Swagger document’s fields.
