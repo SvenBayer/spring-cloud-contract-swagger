@@ -174,7 +174,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 				// Cookie parameters are not supported by Swagger 2.0
 				if (param instanceof BodyParameter) {
 					BodyParameter bodyParameter = BodyParameter.class.cast(param);
-					Object value = RequestBodyParamBuilder.createDefaultValueForRequestBodyParameter(bodyParameter, swagger.getDefinitions());
+					String value = RequestBodyParamBuilder.createDefaultValueForRequestBodyParameter(bodyParameter, swagger.getDefinitions());
 					if (value != null) {
 						request.body(value);
 					}

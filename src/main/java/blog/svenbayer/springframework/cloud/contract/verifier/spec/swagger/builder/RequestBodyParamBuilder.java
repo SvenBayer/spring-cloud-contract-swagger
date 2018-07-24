@@ -18,25 +18,24 @@ public final class RequestBodyParamBuilder {
 	private RequestBodyParamBuilder() {
 	}
 
-	public static Object createDefaultValueForRequestBodyParameter(BodyParameter param, Map<String, Model> definitions) {
-		Object rawValue = null;
-		ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	public static String createDefaultValueForRequestBodyParameter(BodyParameter param, Map<String, Model> definitions) {
 		// TODO this is not verified
 		if (param.getExamples() != null && param.getExamples().entrySet().iterator().hasNext()) {
-			rawValue = param.getExamples().entrySet().iterator().next();
+			return String.valueOf(param.getExamples().entrySet().iterator().next());
 		} else if (param.getVendorExtensions() != null && param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
-			rawValue = param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField());
+			return String.valueOf(param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()));
 		} else if (param.getSchema() != null) {
 			if (param.getSchema().getExample() != null) {
-				rawValue = param.getSchema().getExample();
+				return String.valueOf(param.getSchema().getExample());
 			} else if (param.getSchema().getVendorExtensions() != null && param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
-				rawValue = param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField());
+				return String.valueOf(param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()));
 			} else if (param.getSchema().getReference() != null) {
 				String reference = param.getSchema().getReference();
 				Map<?, ?> jsonMap = ValuePropertyBuilder.getJsonForPropertiesConstruct(reference, definitions);
 
 				String result;
 				try {
+					ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 					result = mapper.writeValueAsString(jsonMap);
 				} catch (JsonProcessingException e) {
 					throw new SwaggerContractConverterException("Could not parse jsonMap!", e);
@@ -47,10 +46,6 @@ public final class RequestBodyParamBuilder {
 		} else {
 			throw new SwaggerContractConverterException("Could not parse body for request");
 		}
-		try {
-			return mapper.writeValueAsString(rawValue);
-		} catch (JsonProcessingException e) {
-			throw new SwaggerContractConverterException("Could not parse rawValue!", e);
-		}
+		return null;
 	}
 }
