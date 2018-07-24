@@ -19,22 +19,21 @@ public final class ResponseBodyBuilder {
 	}
 
 	public static String createValueForResponseBody(Response response, Map<String, Model> definitions) {
-		Object rawValue;
 		if (response.getExamples() != null && response.getExamples().values().toArray()[0] != null) {
-			rawValue = response.getExamples().values().toArray()[0];
+			return String.valueOf(response.getExamples().values().toArray()[0]);
 		} else if (response.getVendorExtensions() != null && response.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
-			rawValue = response.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField());
+			return String.valueOf(response.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()));
 		} else if (response.getResponseSchema() != null) {
 			String reference = response.getResponseSchema().getReference();
-			rawValue = ValuePropertyBuilder.getJsonForPropertiesConstruct(reference, definitions);
+			Object rawValue = ValuePropertyBuilder.getJsonForPropertiesConstruct(reference, definitions);
+			ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+			try {
+				return mapper.writeValueAsString(rawValue);
+			} catch (JsonProcessingException e) {
+				throw new SwaggerContractConverterException("Could not convert raw value for responsoe body to json!", e);
+			}
 		} else {
 			throw new SwaggerContractConverterException("Could not parse body for response");
-		}
-		ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-		try {
-			return mapper.writeValueAsString(rawValue);
-		} catch (JsonProcessingException e) {
-			throw new SwaggerContractConverterException("Could not convert raw value for responsoe body to json!", e);
 		}
 	}
 }

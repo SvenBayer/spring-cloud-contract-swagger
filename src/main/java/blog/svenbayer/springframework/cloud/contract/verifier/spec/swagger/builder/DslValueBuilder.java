@@ -1,5 +1,6 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -16,6 +17,15 @@ public final class DslValueBuilder {
 	}
 
 	public static DslProperty<Object> createDslValueForParameter(AbstractSerializableParameter param) {
+		if (param.getVendorExtensions() != null) {
+			Object ignore = param.getVendorExtensions().get("x-ignore");
+			if (ignore != null && Boolean.valueOf(ignore.toString())) {
+				if (param.getRequired()) {
+					throw new SwaggerContractConverterException("Set the parameter '" + param.getName() + "' to required: false to use x-ignore: true");
+				}
+				return null;
+			}
+		}
 		Object value = createServerValueForParameter(param);
 		if (value == null) {
 			value = createDefaultValueForType(param);
