@@ -11,7 +11,7 @@
 
     <groupId>blog.svenbayer</groupId>
     <artifactId>spring-cloud-contract-swagger</artifactId>
-    <version>1.0.2.BUILD-SNAPSHOT</version>
+    <version>1.0.2.RELEASE</version>
     <packaging>jar</packaging>
 
     <name>blog.svenbayer:spring-cloud-contract-swagger</name>
@@ -170,9 +170,9 @@
                     </execution>
                 </executions>
                 <!-- Remove this for releases or find a fancy way to handle this! -->
-                <configuration>
+                <!--<configuration>
                     <skip>true</skip>
-                </configuration>
+                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
