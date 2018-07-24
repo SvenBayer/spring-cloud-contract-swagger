@@ -150,7 +150,12 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 				operation.getParameters().stream()
 						.filter(param -> param instanceof QueryParameter)
 						.map(AbstractSerializableParameter.class::cast)
-						.forEach(param -> queryParameters.parameter(param.getName(), DslValueBuilder.createDslValueForParameter(param)));
+						.forEach(param -> {
+							DslProperty<Object> value = DslValueBuilder.createDslValueForParameter(param);
+							if (value != null) {
+								queryParameters.parameter(param.getName(), value);
+							}
+						});
 			}
 		}
 
@@ -162,7 +167,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 				if (param instanceof HeaderParameter) {
 					HeaderParameter headerParameter = HeaderParameter.class.cast(param);
 					DslProperty clientValue = DslValueBuilder.createDslValueForParameter(headerParameter);
-					if (headerParameter.getName() != null) {
+					if (clientValue != null && headerParameter.getName() != null) {
 						requestHeaders.header(headerParameter.getName(), clientValue);
 					}
 				}

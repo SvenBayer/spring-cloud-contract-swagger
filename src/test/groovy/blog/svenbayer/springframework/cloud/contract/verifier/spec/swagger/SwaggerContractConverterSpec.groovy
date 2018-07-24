@@ -93,6 +93,68 @@ class SwaggerContractConverterSpec extends Specification {
             contracts.toString().normalize() == [expectedContract].toString().normalize()
     }
 
+    def "should convert from x-ignore fields of swagger to contract"() {
+        given:
+            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/empty_example_swagger.yml").toURI())
+            Contract expectedContract = Contract.make {
+                label("takeoff_coffee_bean_rocket")
+                name("1_takeoff_POST")
+                description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
+                priority(1)
+                request {
+                    method(POST())
+                    urlPath("/coffee-rocket-service/v1.0/takeoff") {
+                        queryParameters {
+                            parameter("withWormhole", new DslProperty(Pattern.compile("(true|false)"), true))
+                        }
+                    }
+                    headers {
+                        contentType(applicationJson())
+                    }
+                    body(
+"""{
+  "beanonauts" : [ {
+    "name" : "name",
+    "age" : 1
+  } ],
+  "boxes" : [ "boxes" ],
+  "fuel" : 1.1,
+  "weight" : 1.1,
+  "itinerary" : {
+    "destination" : "destination",
+    "departure" : "departure"
+  },
+  "rocketName" : "rocketName"
+}""")
+                }
+                response {
+                    status(201)
+                    headers {
+                        header("X-RateLimit-Limit", 1)
+                        contentType(allValue())
+                    }
+                    body(
+"""{
+  "asteroids" : [ {
+    "shape" : "ROUND",
+    "aliens" : [ {
+      "heads" : [ "heads" ]
+    } ],
+    "name" : "name",
+    "speed" : 1,
+    "istransparent" : true
+  } ],
+  "size" : 1,
+  "name" : "name"
+}""")
+                }
+            }
+        when:
+            Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
+        then:
+            contracts.toString().normalize() == [expectedContract].toString().normalize()
+    }
+
 
     def "should convert from single swagger with path param to contract"() {
         given:
