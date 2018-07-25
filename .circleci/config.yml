@@ -42,14 +42,10 @@ jobs:
       # run tests!
       - run:
           name: "Running Tests"
-          command: mvn verify
+          command: mvn verify -Psonar
 
       # publish code coverage
       - run:
           name: "Publish Code Coverage"
           when: on_success
-          command: |
-            mkdir -p $CIRCLE_TEST_REPORTS/junit/
-            find . -type f -regex ".*/target/.*-reports/.*" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-            find . -type f -regex ".*/build/test-results/.*" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-            bash <(curl -s https://codecov.io/bash)
+          command: bash <(curl -s https://codecov.io/bash)
