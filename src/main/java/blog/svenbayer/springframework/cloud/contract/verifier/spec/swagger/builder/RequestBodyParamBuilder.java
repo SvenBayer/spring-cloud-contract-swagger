@@ -11,6 +11,8 @@ import io.swagger.models.parameters.BodyParameter;
 import java.util.Map;
 
 /**
+ * Creates the value for a request body.
+ *
  * @author Sven Bayer
  */
 public final class RequestBodyParamBuilder {
@@ -18,20 +20,27 @@ public final class RequestBodyParamBuilder {
 	private RequestBodyParamBuilder() {
 	}
 
-	public static String createDefaultValueForRequestBodyParameter(BodyParameter param, Map<String, Model> definitions) {
+	/**
+	 * Creates the value for a request body.
+	 *
+	 * @param param the request body
+	 * @param definitions the Swagger model definitions
+	 * @return the value for the request body
+	 */
+	public static String createValueForRequestBody(BodyParameter param, Map<String, Model> definitions) {
 		// TODO this is not verified
 		if (param.getExamples() != null && param.getExamples().entrySet().iterator().hasNext()) {
 			return String.valueOf(param.getExamples().entrySet().iterator().next());
-		} else if (param.getVendorExtensions() != null && param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
-			return String.valueOf(param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()));
+		} else if (param.getVendorExtensions() != null && param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()) != null) {
+			return String.valueOf(param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()));
 		} else if (param.getSchema() != null) {
 			if (param.getSchema().getExample() != null) {
 				return String.valueOf(param.getSchema().getExample());
-			} else if (param.getSchema().getVendorExtensions() != null && param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()) != null) {
-				return String.valueOf(param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.getField()));
+			} else if (param.getSchema().getVendorExtensions() != null && param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()) != null) {
+				return String.valueOf(param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()));
 			} else if (param.getSchema().getReference() != null) {
 				String reference = param.getSchema().getReference();
-				Map<?, ?> jsonMap = ValuePropertyBuilder.getJsonForPropertiesConstruct(reference, definitions);
+				Map<?, ?> jsonMap = ResponseHeaderValueBuilder.getJsonForPropertiesConstruct(reference, definitions);
 
 				String result;
 				try {

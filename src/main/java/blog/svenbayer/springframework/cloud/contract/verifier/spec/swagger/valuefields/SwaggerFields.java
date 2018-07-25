@@ -1,18 +1,13 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields;
 
 /**
+ * Vendor fields of a Swagger document.
+ *
  * @author Sven Bayer
  */
 public enum SwaggerFields {
 	X_EXAMPLE("x-example"),
-	STRING("string"),
-	NUMBER("number"),
-	BOOLEAN("boolean"),
-	DOUBLE("double"),
-	FLOAT("float"),
-	X_IGNORE("x-ignore"),
-	INT_32("int32"),
-	INT_64("int64");
+	X_IGNORE("x-ignore");
 
 	private String swaggerField;
 
@@ -20,7 +15,7 @@ public enum SwaggerFields {
 		this.swaggerField = field;
 	}
 
-	public String getField() {
+	public String field() {
 		return this.swaggerField;
 	}
 }

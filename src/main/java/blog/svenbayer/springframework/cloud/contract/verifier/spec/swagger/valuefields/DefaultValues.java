@@ -1,6 +1,8 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields;
 
 /**
+ * Default values that we set in a Spring Cloud Contract if no example value is set.
+ *
  * @author Sven Bayer
  */
 public final class DefaultValues {

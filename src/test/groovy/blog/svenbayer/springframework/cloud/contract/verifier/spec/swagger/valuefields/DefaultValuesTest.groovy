@@ -2,6 +2,9 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valu
 
 import spock.lang.Specification
 
+/**
+ * @author Sven Bayer
+ */
 class DefaultValuesTest extends Specification {
 
     def "Default value for float and double is set correctly"() {
