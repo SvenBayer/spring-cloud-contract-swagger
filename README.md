@@ -4,6 +4,8 @@
 
 [![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master)
 
+[![Project Stats](https://www.openhub.net/p/spring-cloud-contract-swagger/widgets/project_thin_badge?format=gif&ref=Thin+badge)](https://www.openhub.net/p/spring-cloud-contract-swagger)
+
 [SonarQube](https://sonarcloud.io/dashboard?id=blog.svenbayer%3Aspring-cloud-contract-swagger)
 
 # Spring Cloud Contract Swagger
