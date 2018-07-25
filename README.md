@@ -1,3 +1,7 @@
+[![codecov](https://codecov.io/gh/SvenBayer/spring-cloud-contract-swagger/branch/master/graph/badge.svg)](https://codecov.io/gh/SvenBayer/spring-cloud-contract-swagger)
+
+[![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master)
+
 # Spring Cloud Contract Swagger
 **Converts Swagger files to contracts for Spring Cloud Contract**
 
