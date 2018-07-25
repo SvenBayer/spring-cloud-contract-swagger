@@ -1,5 +1,6 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException
 import io.swagger.models.Swagger
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.cloud.contract.spec.internal.DslProperty
@@ -134,7 +135,7 @@ class SwaggerContractConverterSpec extends Specification {
 
     def "should convert from x-ignore fields of swagger to contract"() {
         given:
-            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/empty_example_swagger.yml").toURI())
+            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/ignored_param_swagger.yml").toURI())
             Contract expectedContract = Contract.make {
                 label("takeoff_coffee_bean_rocket")
                 name("1_takeoff_POST")
@@ -192,6 +193,15 @@ class SwaggerContractConverterSpec extends Specification {
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
             contracts.toString().normalize() == [expectedContract].toString().normalize()
+    }
+
+    def "should expect exception for required param with x-ignore field set to true"() {
+        given:
+            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/ignored_required_param_swagger.yml").toURI())
+        when:
+            converter.convertFrom(singleSwaggerYaml)
+        then:
+            thrown SwaggerContractConverterException
     }
 
     def "should convert from single swagger with path param to contract"() {
@@ -567,7 +577,7 @@ class SwaggerContractConverterSpec extends Specification {
             contracts.toString().normalize() == [expectedContract0, expectedContract1, expectedContract2, expectedContract3, expectedContract4, expectedContract5, expectedContract6].toString().normalize()
     }
 
-    def "should expect_exception_when_converting_contract_to_swagger"() {
+    def "should retrieve empty contract when converting from swagger"() {
         given:
             List<Contract> springCloudContracts = new ArrayList<>()
         when:

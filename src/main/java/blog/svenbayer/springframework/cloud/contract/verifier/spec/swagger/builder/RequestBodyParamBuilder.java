@@ -52,9 +52,7 @@ public final class RequestBodyParamBuilder {
 
 				return result;
 			}
-		} else {
-			throw new SwaggerContractConverterException("Could not parse body for request");
 		}
-		return null;
+		throw new SwaggerContractConverterException("Could not parse body for request");
 	}
 }
