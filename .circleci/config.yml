@@ -31,7 +31,7 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: Resolving Maven Dependencies
+          name: "Resolving Maven Dependencies"
           command: mvn dependency:go-offline
 
       - save_cache:
@@ -41,11 +41,15 @@ jobs:
 
       # run tests!
       - run:
-          name: Running Tests
+          name: "Running Tests"
           command: mvn verify
 
       # publish code coverage
       - run:
-          name: Publish Code Coverage
-          command: bash <(curl -s https://codecov.io/bash)
+          name: "Publish Code Coverage"
           when: on_success
+          command: |
+            mkdir -p $CIRCLE_TEST_REPORTS/junit/
+            find . -type f -regex ".*/target/.*-reports/.*" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+            find . -type f -regex ".*/build/test-results/.*" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+            bash <(curl -s https://codecov.io/bash)
