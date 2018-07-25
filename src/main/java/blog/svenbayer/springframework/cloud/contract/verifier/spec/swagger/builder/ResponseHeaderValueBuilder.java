@@ -71,40 +71,7 @@ public final class ResponseHeaderValueBuilder {
 			}
 		}
 		if (property instanceof AbstractNumericProperty) {
-			AbstractNumericProperty numeric = (AbstractNumericProperty) property;
-			BigDecimal numericPropertyValue = null;
-			if (numeric.getMinimum() != null) {
-				if (numeric.getExclusiveMinimum()) {
-					numericPropertyValue = numeric.getMinimum().add(new BigDecimal(DEFAULT_INT));
-				} else {
-					numericPropertyValue = numeric.getMinimum();
-				}
-			}
-			if (numeric.getMaximum() != null) {
-				if (numeric.getExclusiveMaximum() != null) {
-					numericPropertyValue = numeric.getMaximum().subtract(new BigDecimal(DEFAULT_INT));
-				} else {
-					numericPropertyValue = numeric.getMaximum();
-				}
-			}
-			if (numeric instanceof DoubleProperty || numeric instanceof FloatProperty) {
-				if (numericPropertyValue != null) {
-					return numericPropertyValue.doubleValue();
-				} else {
-					return DEFAULT_FLOAT;
-				}
-			}
-			if (numeric instanceof LongProperty || numeric instanceof DecimalProperty
-					|| numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
-				if (numericPropertyValue != null) {
-					return numericPropertyValue.longValue();
-				} else {
-					return DEFAULT_INT;
-					//TODO return Pattern.compile("[0-9]+");
-				}
-			}
-			return DEFAULT_INT;
-			//TODO return Pattern.compile("[0-9]+");
+			return createDefaultNumericValue((AbstractNumericProperty) property);
 		}
 		if (property instanceof BooleanProperty) {
 			return DEFAULT_BOOLEAN;
@@ -117,6 +84,49 @@ public final class ResponseHeaderValueBuilder {
 		}
 		return key;
 		//TODO return new MatchingTypeValue(MatchingType.REGEX, ".+");
+	}
+
+	/**
+	 * Creates a default numeric value for the given property
+	 *
+	 * @param property the numeric property
+	 * @return the default value
+	 */
+	private static Object createDefaultNumericValue(AbstractNumericProperty property) {
+		AbstractNumericProperty numeric = property;
+		BigDecimal numericPropertyValue = null;
+		if (numeric.getMinimum() != null) {
+			if (numeric.getExclusiveMinimum() != null && numeric.getExclusiveMinimum()) {
+				numericPropertyValue = numeric.getMinimum().add(new BigDecimal(DEFAULT_INT));
+			} else {
+				numericPropertyValue = numeric.getMinimum();
+			}
+		}
+		if (numeric.getMaximum() != null) {
+			if (numeric.getExclusiveMaximum() != null && numeric.getExclusiveMaximum()) {
+				numericPropertyValue = numeric.getMaximum().subtract(new BigDecimal(DEFAULT_INT));
+			} else {
+				numericPropertyValue = numeric.getMaximum();
+			}
+		}
+		if (numeric instanceof DoubleProperty || numeric instanceof FloatProperty) {
+			if (numericPropertyValue != null) {
+				return numericPropertyValue.doubleValue();
+			} else {
+				return DEFAULT_FLOAT;
+			}
+		}
+		if (numeric instanceof LongProperty || numeric instanceof DecimalProperty
+				|| numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
+			if (numericPropertyValue != null) {
+				return numericPropertyValue.longValue();
+			} else {
+				return DEFAULT_INT;
+				//TODO return Pattern.compile("[0-9]+");
+			}
+		}
+		return DEFAULT_INT;
+		//TODO return Pattern.compile("[0-9]+");
 	}
 
 	/**
