@@ -49,3 +49,9 @@ jobs:
           name: "Publish Code Coverage"
           when: on_success
           command: bash <(curl -s https://codecov.io/bash)
+
+      # run SonarQube
+      - run:
+          name: "Run SonarQube"
+          when: always
+          command: mvn sonar:sonar -Dsonar.organization=svenbayer-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONARQUBE_TOKEN}
