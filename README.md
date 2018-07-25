@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master)
 
+[SonarQube](https://sonarcloud.io/dashboard?id=blog.svenbayer%3Aspring-cloud-contract-swagger)
+
 # Spring Cloud Contract Swagger
 **Converts Swagger files to contracts for Spring Cloud Contract**
 
