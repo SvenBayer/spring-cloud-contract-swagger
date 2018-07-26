@@ -1,5 +1,7 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolver;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolverFactory;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import io.swagger.models.Model;
 import io.swagger.models.properties.*;
@@ -9,7 +11,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.*;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.INT_32;
@@ -21,6 +22,8 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
  * @author Sven Bayer
  */
 public final class ResponseHeaderValueBuilder {
+
+	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
 
 	private ResponseHeaderValueBuilder() {
 	}
@@ -47,7 +50,7 @@ public final class ResponseHeaderValueBuilder {
 	 * @param definitions the Swagger model definition
 	 * @return the value for the given response header property
 	 */
-	private static Object createResponseHeaderValue(String key, Property property, Map<String, Model> definitions) {
+	public static Object createResponseHeaderValue(String key, Property property, Map<String, Model> definitions) {
 		if (property.getExample() != null) {
 			return postFormatNumericValue(property, property.getExample());
 		}
@@ -60,7 +63,9 @@ public final class ResponseHeaderValueBuilder {
 		}
 		if (property instanceof RefProperty) {
 			RefProperty refProperty = RefProperty.class.cast(property);
-			return getJsonForPropertiesConstruct(refProperty.get$ref(), definitions);
+			String ref = refProperty.get$ref();
+			ReferenceResolver resolver = refFactory.getReferenceResolver(ref);
+			return resolver.resolveReference(ref, definitions);
 		}
 		if (property instanceof ArrayProperty) {
 			ArrayProperty arrayProperty = ArrayProperty.class.cast(property);
@@ -127,19 +132,6 @@ public final class ResponseHeaderValueBuilder {
 		}
 		return DEFAULT_INT;
 		//TODO return Pattern.compile("[0-9]+");
-	}
-
-	/**
-	 * Creats a key-value representation for the given reference and Swagger model definitions.
-	 *
-	 * @param reference the unformatted Swagger reference string
-	 * @param definitions the Swagger model definitions
-	 * @return a key-value representation of the Swagger model definition
-	 */
-	static Map<String, Object> getJsonForPropertiesConstruct(String reference, Map<String, Model> definitions) {
-		String referenceName = reference.substring(reference.lastIndexOf('/') + 1);
-		return definitions.get(referenceName).getProperties().entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, entry -> createResponseHeaderValue(entry.getKey(), entry.getValue(), definitions)));
 	}
 
 	/**

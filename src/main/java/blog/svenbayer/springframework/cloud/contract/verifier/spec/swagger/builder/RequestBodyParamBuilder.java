@@ -1,10 +1,9 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolver;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolverFactory;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.BodyParameter;
 
@@ -17,8 +16,7 @@ import java.util.Map;
  */
 public final class RequestBodyParamBuilder {
 
-	private RequestBodyParamBuilder() {
-	}
+	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
 
 	/**
 	 * Creates the value for a request body.
@@ -40,17 +38,8 @@ public final class RequestBodyParamBuilder {
 				return String.valueOf(param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()));
 			} else if (param.getSchema().getReference() != null) {
 				String reference = param.getSchema().getReference();
-				Map<?, ?> jsonMap = ResponseHeaderValueBuilder.getJsonForPropertiesConstruct(reference, definitions);
-
-				String result;
-				try {
-					ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-					result = mapper.writeValueAsString(jsonMap);
-				} catch (JsonProcessingException e) {
-					throw new SwaggerContractConverterException("Could not parse jsonMap!", e);
-				}
-
-				return result;
+				ReferenceResolver referenceResolver = refFactory.getReferenceResolver(reference);
+				return referenceResolver.resolveReference(reference, definitions);
 			}
 		}
 		throw new SwaggerContractConverterException("Could not parse body for request");
