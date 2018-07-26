@@ -108,6 +108,12 @@
             <artifactId>swagger-parser</artifactId>
             <version>${swagger-parser.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.0.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
