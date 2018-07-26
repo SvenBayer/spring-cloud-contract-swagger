@@ -34,7 +34,21 @@ paths:
           description: coffeeRocket
           required: true
           schema:
-            $ref: '#/definitions/CoffeeRocket'
+            example: '{
+                          "beanonauts": [
+                          {
+                              "name": "Tom Hanks",
+                              "age": 62.0
+                          }],
+                          "fuel": 300000.5,
+                          "weight": 45931.0,
+                          "itinerary":
+                          {
+                              "destination": "Moon",
+                              "departure": "Earth"
+                          },
+                          "rocketName": "Beanpollo 13"
+                      }'
         - in: query
           name: withWormhole
           description: withWormhole
@@ -58,22 +72,20 @@ paths:
             X-RateLimit-Limit:
               type: integer
               description: Request limit per hour.
-            wormholeCount:
-              description: wormholeCount
-              type: integer
-              minimum: 10
-              exclusiveMinimum: true
-            hyperLoopCount:
-              description: hyperLoopCount
-              type: integer
-              maximum: 5
-              exclusiveMaximum: true
-            draculaCount:
-              description: draculaCount
-              type: integer
-              maximum: 3
           schema:
-            $ref: '#/definitions/BeanPlanet'
+            example: '{
+                        "asteroids" : [ {
+                          "shape" : "BEAN",
+                          "aliens" : [ {
+                            "heads" : [ "big ones" ]
+                          } ],
+                          "name" : "Beansteroid",
+                          "speed" : 250,
+                          "istransparent" : false
+                        } ],
+                        "size" : 1,
+                        "name" : "Beanlet"
+                      }'
         '401':
           description: Unauthorized
         '403':
