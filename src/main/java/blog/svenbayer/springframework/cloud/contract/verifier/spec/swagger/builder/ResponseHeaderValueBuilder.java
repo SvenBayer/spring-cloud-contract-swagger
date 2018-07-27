@@ -39,7 +39,7 @@ public final class ResponseHeaderValueBuilder {
 	public static DslProperty createDslResponseHeaderValue(String key, Property property, Map<String, Model> definitions) {
 		Object value = createResponseHeaderValue(key, property, definitions);
 		//TODO avoid default values and set the pattern for the corresponding type
-		return new DslProperty<>(String.valueOf(value));
+		return new DslProperty<>(value);
 	}
 
 	/**
@@ -124,7 +124,15 @@ public final class ResponseHeaderValueBuilder {
 		if (numeric instanceof LongProperty || numeric instanceof DecimalProperty
 				|| numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
 			if (numericPropertyValue != null) {
-				return numericPropertyValue.longValue();
+				if (numeric instanceof LongProperty) {
+					return numericPropertyValue.longValue();
+				} else if (numeric instanceof DecimalProperty) {
+					return numericPropertyValue;
+				} else if (numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
+					return numericPropertyValue.intValue();
+				} else {
+					return DEFAULT_INT;
+				}
 			} else {
 				return DEFAULT_INT;
 				//TODO return Pattern.compile("[0-9]+");

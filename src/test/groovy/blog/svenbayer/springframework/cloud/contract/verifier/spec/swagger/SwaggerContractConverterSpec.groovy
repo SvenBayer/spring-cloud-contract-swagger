@@ -1,5 +1,6 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.TestContractEquals
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException
 import io.swagger.models.Swagger
 import org.springframework.cloud.contract.spec.Contract
@@ -15,10 +16,11 @@ import java.util.regex.Pattern
 class SwaggerContractConverterSpec extends Specification {
 
     @Subject SwaggerContractConverter converter = new SwaggerContractConverter()
+    TestContractEquals testContractEquals = new TestContractEquals();
 
     def "should accept yaml files that are swagger files"() {
         given:
-            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/single_swagger.yml").toURI())
+            File singleSwaggerYaml = new File(SwaggerContractConverterSpec.class.getResource("/swagger/single_swagger.yml").toURI())
         expect:
             converter.isAccepted(singleSwaggerYaml)
     }
@@ -91,7 +93,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from swagger with min and max values to contract"() {
@@ -159,7 +161,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from swagger with json x-example to contract"() {
@@ -198,7 +200,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from swagger with json example to contract"() {
@@ -237,7 +239,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from swagger with json x-example and no ref to contract"() {
@@ -276,7 +278,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from x-ignore fields of swagger to contract"() {
@@ -338,7 +340,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should expect exception for required param with x-ignore field set to true"() {
@@ -389,6 +391,7 @@ class SwaggerContractConverterSpec extends Specification {
                 response {
                     status(201)
                     headers {
+                        header("X-RateLimit-Limit", 1)
                         contentType(applicationJson())
                     }
                     body(
@@ -400,7 +403,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from single parametrized swagger to contract"() {
@@ -441,6 +444,7 @@ class SwaggerContractConverterSpec extends Specification {
                 response {
                     status(201)
                     headers {
+                        header("X-RateLimit-Limit", 1)
                         contentType(allValue())
                     }
                     body(
@@ -458,7 +462,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-            contracts.toString().normalize() == [expectedContract].toString().normalize()
+            testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
     }
 
     def "should convert from multiple swagger to contract"() {
@@ -499,6 +503,7 @@ class SwaggerContractConverterSpec extends Specification {
                 response {
                     status(201)
                     headers {
+                        header("X-RateLimit-Limit", 1)
                         contentType(allValue())
                     }
                     body(
@@ -525,7 +530,7 @@ class SwaggerContractConverterSpec extends Specification {
                         }
                     }
                     headers {
-                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
+                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "X-Request-ID"))
                         contentType(applicationJson())
                     }
                     body(
@@ -574,7 +579,7 @@ class SwaggerContractConverterSpec extends Specification {
                         }
                     }
                     headers {
-                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
+                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "X-Request-ID"))
                         contentType(applicationJson())
                     }
                 }
@@ -606,7 +611,7 @@ class SwaggerContractConverterSpec extends Specification {
                         }
                     }
                     headers {
-                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
+                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "X-Request-ID"))
                     }
                 }
                 response {
@@ -633,7 +638,7 @@ class SwaggerContractConverterSpec extends Specification {
                     }
                 }
                 headers {
-                    header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
+                    header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "X-Request-ID"))
                     contentType(applicationJson())
                 }
                 body(
@@ -666,7 +671,7 @@ class SwaggerContractConverterSpec extends Specification {
                         }
                     }
                     headers {
-                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
+                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "X-Request-ID"))
                         contentType(applicationJson())
                     }
                     body(
@@ -699,7 +704,7 @@ class SwaggerContractConverterSpec extends Specification {
                         }
                     }
                     headers {
-                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
+                        header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "X-Request-ID"))
                     }
                 }
                 response {
@@ -712,15 +717,7 @@ class SwaggerContractConverterSpec extends Specification {
         when:
             Collection<Contract> contracts = converter.convertFrom(multipleSwaggerYaml)
         then:
-            contracts.size() == 7
-            contracts.getAt(0).toString().normalize() == expectedContract0.toString().normalize()
-            contracts.getAt(1).toString().normalize() == expectedContract1.toString().normalize()
-            contracts.getAt(2).toString().normalize() == expectedContract2.toString().normalize()
-            contracts.getAt(3).toString().normalize() == expectedContract3.toString().normalize()
-            contracts.getAt(4).toString().normalize() == expectedContract4.toString().normalize()
-            contracts.getAt(5).toString().normalize() == expectedContract5.toString().normalize()
-            contracts.getAt(6).toString().normalize() == expectedContract6.toString().normalize()
-            contracts.toString().normalize() == [expectedContract0, expectedContract1, expectedContract2, expectedContract3, expectedContract4, expectedContract5, expectedContract6].toString().normalize()
+            testContractEquals.assertContractEquals([expectedContract0, expectedContract1, expectedContract2, expectedContract3, expectedContract4, expectedContract5, expectedContract6], contracts)
     }
 
     def "should retrieve empty contract when converting from swagger"() {

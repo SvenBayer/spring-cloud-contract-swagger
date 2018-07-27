@@ -154,7 +154,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		if (operation.getProduces() != null) {
 			operation.getProduces().forEach(contentType -> {
 				if (contentType.equals("*/*")) {
-					responseHeaders.contentType("");
+					responseHeaders.contentType("*/*");
 				} else {
 					responseHeaders.contentType(contentType);
 				}
