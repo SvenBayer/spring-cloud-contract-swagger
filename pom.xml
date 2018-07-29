@@ -199,6 +199,13 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>io.packagecloud.maven.wagon</groupId>
+                <artifactId>maven-packagecloud-wagon</artifactId>
+                <version>0.0.4</version>
+            </extension>
+        </extensions>
     </build>
     <dependencyManagement>
         <dependencies>
@@ -278,6 +285,22 @@
                     </snapshots>
                 </pluginRepository>
             </pluginRepositories>
+        </profile>
+        <profile>
+            <id>blogsvenbayer</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>packagecloud-blogsvenbayer</id>
+                    <url>packagecloud+https://packagecloud.io/svenbayer/blogsvenbayer</url>
+                </repository>
+                <snapshotRepository>
+                    <id>packagecloud-blogsvenbayer</id>
+                    <url>packagecloud+https://packagecloud.io/svenbayer/blogsvenbayer</url>
+                </snapshotRepository>
+            </distributionManagement>
         </profile>
     </profiles>
 </project>

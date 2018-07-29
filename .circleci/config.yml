@@ -55,3 +55,8 @@ jobs:
           name: "Run SonarQube"
           when: always
           command: mvn sonar:sonar -Dsonar.organization=svenbayer-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONARQUBE_TOKEN}
+
+      - run:
+          name: "Deployment"
+          when: on_success
+          command: mvn -s .circleci/.circleci.settings.xml -DskipTests deploy -Pblogsvenbayer
