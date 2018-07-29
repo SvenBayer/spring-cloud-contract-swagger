@@ -11,15 +11,15 @@ import java.util.regex.Pattern
 /**
  * @author Sven Bayer
  */
-class SingleSwaggerContractSpec extends Specification {
+class ComplexSwaggerContractSpec extends Specification {
 
     @Subject
     SwaggerContractConverter converter = new SwaggerContractConverter()
     TestContractEquals testContractEquals = new TestContractEquals()
 
-    def "should convert from single swagger to contract"() {
+    def "should convert from single parametrized swagger to contract"() {
         given:
-        File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/single_swagger.yml").toURI())
+        File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/complex_definitions/param_swagger.yml").toURI())
         Contract expectedContract = Contract.make {
             label("takeoff_coffee_bean_rocket")
             name("1_takeoff_POST")
@@ -29,27 +29,27 @@ class SingleSwaggerContractSpec extends Specification {
                 method(POST())
                 urlPath("/coffee-rocket-service/v1.0/takeoff") {
                     queryParameters {
-                        parameter("withWormhole", new DslProperty(Pattern.compile("(true|false)"), true))
-                        parameter("viaHyperLoop", new DslProperty(Pattern.compile("(true|false)"), true))
+                        parameter("withWormhole", new DslProperty(Pattern.compile("(true|false)"), false))
+                        parameter("viaHyperLoop", new DslProperty(Pattern.compile("(true|false)"), false))
                     }
                 }
                 headers {
                     header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
                     contentType(applicationJson())
                 }
-                body("""{
+                body(
+                        """{
   "beanonauts" : [ {
-    "name" : "name",
-    "age" : 1
+    "name" : "Beanon Beanusk",
+    "age" : 47
   } ],
-  "boxes" : [ "boxes" ],
-  "fuel" : 1.1,
-  "weight" : 1.1,
+  "fuel" : 980.3,
+  "weight" : 20.85,
   "itinerary" : {
-    "destination" : "destination",
-    "departure" : "departure"
+    "destination" : "Mars",
+    "departure" : "Earth"
   },
-  "rocketName" : "rocketName"
+  "rocketName" : "BeanRocket Heavy"
 }""")
             }
             response {
@@ -58,18 +58,15 @@ class SingleSwaggerContractSpec extends Specification {
                     header("X-RateLimit-Limit", 1)
                     contentType(allValue())
                 }
-                body("""{
+                body(
+                        """{
   "asteroids" : [ {
-    "shape" : "ROUND",
-    "aliens" : [ {
-      "heads" : [ "heads" ]
-    } ],
-    "name" : "name",
-    "speed" : 1,
-    "istransparent" : true
+    "shape" : "BEAN",
+    "name" : "Phobos",
+    "speed" : 23
   } ],
-  "size" : 1,
-  "name" : "name"
+  "size" : 6779,
+  "name" : "Mars"
 }""")
             }
         }

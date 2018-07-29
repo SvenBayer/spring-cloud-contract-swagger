@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * @author Sven Bayer
+ */
 class ReferenceResolverFactoryTest {
 
 	private ReferenceResolverFactory factory;

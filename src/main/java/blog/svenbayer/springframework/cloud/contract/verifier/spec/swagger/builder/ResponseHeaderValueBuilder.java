@@ -38,7 +38,8 @@ public final class ResponseHeaderValueBuilder {
 	 */
 	public static DslProperty createDslResponseHeaderValue(String key, Property property, Map<String, Model> definitions) {
 		Object value = createResponseHeaderValue(key, property, definitions);
-		//TODO avoid default values and set the pattern for the corresponding type
+		//TODO avoid default values
+		// TODO Pattern does not appear for Property types
 		return new DslProperty<>(value);
 	}
 

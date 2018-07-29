@@ -34,7 +34,7 @@ class MinMaxValuesSwaggerContractSpec extends Specification {
                     }
                 }
                 headers {
-                    header("X-Request-ID", "123456")
+                    header("X-Request-ID", new DslProperty(Pattern.compile(".+"), "123456"))
                     contentType(applicationJson())
                 }
                 body(

@@ -39,19 +39,16 @@ public final class DslValueBuilder {
 		Object value = createServerValueForParameter(param);
 		if (value == null) {
 			value = createDefaultValueForType(param);
-			if (param.pattern == null) {
-				Pattern pattern = createPatternForParameter(param);
-				return new DslProperty<>(pattern, value);
-			}
 		}
-		DslProperty<Object> dslProperty;
 		// TODO we need to check if the pattern matches
 		if (param.pattern != null) {
-			dslProperty = new DslProperty<>(Pattern.compile(param.pattern), value);
+			return new DslProperty<>(Pattern.compile(param.pattern), value);
 		} else {
-			dslProperty = new DslProperty<>(value);
+			String type = param.getType();
+			String format = param.getFormat();
+			Pattern pattern = PatternBuilder.createPatternForParameter(type, format);
+			return new DslProperty<>(pattern, value);
 		}
-		return dslProperty;
 	}
 
 	/**
@@ -74,42 +71,6 @@ public final class DslValueBuilder {
 			return param.getEnum().get(0);
 		}
 		return null;
-	}
-
-	/**
-	 * Creates a pattern for a given parameter.
-	 *
-	 * @param param the parameter
-	 * @return the pattern
-	 */
-	private static Pattern createPatternForParameter(AbstractSerializableParameter param) {
-		String regex = createRegexForDefaultValue(param);
-		return Pattern.compile(regex);
-	}
-
-	/**
-	 * Creates a regex for a given parameter.
-	 *
-	 * @param param the parameter
-	 * @return the regex
-	 */
-	private static String createRegexForDefaultValue(AbstractSerializableParameter param) {
-		String type = param.getType();
-		String format = param.getFormat();
-
-		if (STRING.type().equals(type)) {
-			return ".+";
-		}
-		if ((NUMBER.type().equals(type)) && (DOUBLE.type().equals(format) || FLOAT.type().equals(format))) {
-			return "[0-9]+\\.[0-9]+";
-		}
-		if (NUMBER.type().equals(type)) {
-			return "[0-9]+";
-		}
-		if (BOOLEAN.type().equals(type)) {
-			return "(true|false)";
-		}
-		return ".+";
 	}
 
 	/**

@@ -10,6 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * @author Sven Bayer
+ */
 class ContractNameBuilderTest {
 
 	@DisplayName("Escapes path for Contract name with path parameter and slashes")

@@ -73,7 +73,7 @@ public class TestContractEquals {
 		assertDslPropertyEquals(expectedResponse.getDelay(), actualResponse.getDelay(), msg);
 		assertHeadersEquals(expectedResponse.getHeaders(), actualResponse.getHeaders(), msg);
 		assertEquals(expectedResponse.getCookies(), actualResponse.getCookies(), msg);
-		assertEquals(expectedResponse.getBody(), actualResponse.getBody(), msg);
+		assertDslPropertyEquals(expectedResponse.getBody(), actualResponse.getBody(), msg);
 		assertEquals(expectedResponse.isAsync(), actualResponse.isAsync(), msg);
 		assertEquals(expectedResponse.getBodyMatchers(), actualResponse.getBodyMatchers(), msg);
 	}
@@ -93,7 +93,7 @@ public class TestContractEquals {
 		assertUrlPathEquals(expectedRequest.getUrlPath(), actualRequest.getUrlPath(), msg);
 		assertHeadersEquals(expectedRequest.getHeaders(), actualRequest.getHeaders(), msg);
 		assertEquals(expectedRequest.getCookies(), actualRequest.getCookies(), msg);
-		assertEquals(expectedRequest.getBody(), actualRequest.getBody(), msg);
+		assertDslPropertyEquals(expectedRequest.getBody(), actualRequest.getBody(), msg);
 		assertEquals(expectedRequest.getMultipart(), actualRequest.getMultipart(), msg);
 		assertEquals(expectedRequest.getBodyMatchers(), actualRequest.getBodyMatchers(), msg);
 	}
@@ -191,11 +191,13 @@ public class TestContractEquals {
 
 	private static void assertPossiblePatternEquals(Object expected, Object actual, String msg) {
 		if (expected instanceof Pattern) {
+			msg = msg + "Pattern:\n";
 			assertEquals(Pattern.class, actual.getClass(), msg);
 			Pattern expectedPattern = Pattern.class.cast(expected);
 			Pattern actualPattern = Pattern.class.cast(actual);
 			assertEquals(expectedPattern.pattern(), actualPattern.pattern(), msg);
 		} else if (expected instanceof DslProperty) {
+			msg = msg + "DslProperty:\n";
 			DslProperty expectedDslProperty = DslProperty.class.cast(expected);
 			DslProperty actualDslProperty = DslProperty.class.cast(actual);
 			assertDslPropertyEquals(expectedDslProperty, actualDslProperty, msg);
