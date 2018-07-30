@@ -55,10 +55,10 @@ jobs:
         root: ~/repo
 
   sonarqube:
-    - attach_workspace:
-      at: ~/repo
-
     steps:
+      - attach_workspace:
+        at: ~/repo
+
       # run SonarQube
       - run:
           name: "Run SonarQube"
@@ -66,10 +66,10 @@ jobs:
           command: mvn sonar:sonar -Dsonar.organization=svenbayer-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONARQUBE_TOKEN}
 
   deploy:
-    - attach_workspace:
-      at: ~/repo
-
     steps:
+      - attach_workspace:
+        at: ~/repo
+
       - run:
           name: "Snapshot Deployment"
           when: on_success
