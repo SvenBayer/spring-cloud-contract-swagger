@@ -1,7 +1,7 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolver;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolverFactory;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.SwaggerReferenceResolver;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import io.swagger.models.Model;
@@ -17,6 +17,9 @@ import java.util.Map;
 public final class RequestBodyParamBuilder {
 
 	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
+
+	private RequestBodyParamBuilder() {
+	}
 
 	/**
 	 * Creates the value for a request body.
@@ -38,8 +41,8 @@ public final class RequestBodyParamBuilder {
 				return String.valueOf(param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()));
 			} else if (param.getSchema().getReference() != null) {
 				String reference = param.getSchema().getReference();
-				ReferenceResolver referenceResolver = refFactory.getReferenceResolver(reference);
-				return referenceResolver.resolveReference(reference, definitions);
+				SwaggerReferenceResolver swaggerReferenceResolver = refFactory.getReferenceResolver(reference, param.getVendorExtensions());
+				return swaggerReferenceResolver.resolveReference(definitions);
 			}
 		}
 		throw new SwaggerContractConverterException("Could not parse body for request");

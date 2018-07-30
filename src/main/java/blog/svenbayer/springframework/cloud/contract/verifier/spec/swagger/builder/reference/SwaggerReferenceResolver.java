@@ -4,7 +4,10 @@ import io.swagger.models.Model;
 
 import java.util.Map;
 
-public interface ReferenceResolver {
+/**
+ * @author Sven Bayer
+ */
+public interface SwaggerReferenceResolver {
 
-	String resolveReference(String reference, Map<String, Model> definitions);
+	String resolveReference(Map<String, Model> definitions);
 }

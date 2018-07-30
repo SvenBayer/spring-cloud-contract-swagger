@@ -7,6 +7,7 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valu
  */
 public enum SwaggerFields {
 	X_EXAMPLE("x-example"),
+	X_REF("x-ref"),
 	X_IGNORE("x-ignore");
 
 	private String swaggerField;

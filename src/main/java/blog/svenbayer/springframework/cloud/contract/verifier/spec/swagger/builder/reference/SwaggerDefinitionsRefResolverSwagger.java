@@ -11,7 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SwaggerDefinitionsRefResolver implements ReferenceResolver {
+/**
+ * @author Sven Bayer
+ */
+public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceResolver {
 
 	private static final Map<String, String> REPLACEMENTS = new HashMap<>();
 
@@ -22,15 +25,20 @@ public class SwaggerDefinitionsRefResolver implements ReferenceResolver {
 		REPLACEMENTS.put("\\}\"", "}");
 	}
 
+	private String reference;
+
+	public SwaggerDefinitionsRefResolverSwagger(String reference) {
+		this.reference = reference;
+	}
+
 	/**
 	 * Creats a key-value representation for the given reference and Swagger model definitions.
 	 *
-	 * @param reference the unformatted Swagger reference string
 	 * @param definitions the Swagger model definitions
 	 * @return a json representation of the Swagger model definition
 	 */
 	@Override
-	public String resolveReference(String reference, Map<String, Model> definitions) {
+	public String resolveReference(Map<String, Model> definitions) {
 		Map<String, Object> jsonMap = resolveDefinitionsRef(reference, definitions);
 		try {
 			ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);

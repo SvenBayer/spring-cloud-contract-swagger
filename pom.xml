@@ -49,6 +49,7 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -124,11 +125,18 @@
     </distributionManagement>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>io.packagecloud.maven.wagon</groupId>
+                <artifactId>maven-packagecloud-wagon</artifactId>
+                <version>0.0.4</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${maven-gpg-plugin.version}.8</version>
+                <version>${nexus-staging-maven-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -199,13 +207,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>io.packagecloud.maven.wagon</groupId>
-                <artifactId>maven-packagecloud-wagon</artifactId>
-                <version>0.0.4</version>
-            </extension>
-        </extensions>
     </build>
     <dependencyManagement>
         <dependencies>
@@ -289,15 +290,15 @@
         <profile>
             <id>blogsvenbayer</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>packagecloud-blogsvenbayer</id>
+                    <id>packagecloud-svenbayer</id>
                     <url>packagecloud+https://packagecloud.io/svenbayer/blogsvenbayer</url>
                 </repository>
                 <snapshotRepository>
-                    <id>packagecloud-blogsvenbayer</id>
+                    <id>packagecloud-svenbayer</id>
                     <url>packagecloud+https://packagecloud.io/svenbayer/blogsvenbayer</url>
                 </snapshotRepository>
             </distributionManagement>

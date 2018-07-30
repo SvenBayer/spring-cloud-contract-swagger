@@ -1,0 +1,13 @@
+{
+  "asteroids" : [ {
+    "shape" : "BEAN",
+    "aliens" : [ {
+      "heads" : [ "OMG" ]
+    } ],
+    "name" : "Alien",
+    "speed" : 200,
+    "istransparent" : false
+  } ],
+  "size" : 20,
+  "name" : "Moon"
+}

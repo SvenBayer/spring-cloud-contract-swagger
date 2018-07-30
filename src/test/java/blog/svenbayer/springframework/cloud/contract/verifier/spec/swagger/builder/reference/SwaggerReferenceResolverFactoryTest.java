@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Sven Bayer
  */
-class ReferenceResolverFactoryTest {
+class SwaggerReferenceResolverFactoryTest {
 
 	private ReferenceResolverFactory factory;
 
@@ -19,27 +19,19 @@ class ReferenceResolverFactoryTest {
 		factory = new ReferenceResolverFactory();
 	}
 
-	@DisplayName("Fails to receive ReferenceResolver for null")
+	@DisplayName("Fails to receive SwaggerReferenceResolver for null")
 	@Test
 	void failsforNull() {
 		assertThrows(SwaggerContractConverterException.class, () -> {
-			factory.getReferenceResolver(null);
+			factory.getReferenceResolver(null, null);
 		});
 	}
 
-	@DisplayName("Fails to receive ReferenceResolver for empty string")
+	@DisplayName("Fails to receive SwaggerReferenceResolver for empty string")
 	@Test
 	void failsForEmptyString() {
 		assertThrows(SwaggerContractConverterException.class, () -> {
-			factory.getReferenceResolver("");
-		});
-	}
-
-	@DisplayName("Fails to receive ReferenceResolver for unknown resolver")
-	@Test
-	void failsForUnknownResolver() {
-		assertThrows(SwaggerContractConverterException.class, () -> {
-			factory.getReferenceResolver("&");
+			factory.getReferenceResolver("", null);
 		});
 	}
 }

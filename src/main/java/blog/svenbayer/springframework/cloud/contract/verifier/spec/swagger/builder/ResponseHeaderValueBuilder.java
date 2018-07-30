@@ -1,7 +1,7 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolver;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.ReferenceResolverFactory;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.SwaggerReferenceResolver;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields;
 import io.swagger.models.Model;
 import io.swagger.models.properties.*;
@@ -24,9 +24,6 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
 public final class ResponseHeaderValueBuilder {
 
 	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
-
-	private ResponseHeaderValueBuilder() {
-	}
 
 	/**
 	 * Creates a dsl value for a response header property.
@@ -65,8 +62,8 @@ public final class ResponseHeaderValueBuilder {
 		if (property instanceof RefProperty) {
 			RefProperty refProperty = RefProperty.class.cast(property);
 			String ref = refProperty.get$ref();
-			ReferenceResolver resolver = refFactory.getReferenceResolver(ref);
-			return resolver.resolveReference(ref, definitions);
+			SwaggerReferenceResolver resolver = refFactory.getReferenceResolver(refProperty.get$ref(), refProperty.getVendorExtensions());
+			return resolver.resolveReference(definitions);
 		}
 		if (property instanceof ArrayProperty) {
 			ArrayProperty arrayProperty = ArrayProperty.class.cast(property);

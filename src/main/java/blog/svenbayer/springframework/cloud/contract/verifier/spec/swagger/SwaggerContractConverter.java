@@ -61,6 +61,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		if (swagger == null || swagger.getPaths() == null) {
 			return Collections.emptyList();
 		}
+		SwaggerFileFolder.setSwaggerFileFolder(file.getParentFile().toPath());
 		final AtomicInteger priority = new AtomicInteger(1);
 		return swagger.getPaths().entrySet().stream()
 				.flatMap(pathEntry -> {
