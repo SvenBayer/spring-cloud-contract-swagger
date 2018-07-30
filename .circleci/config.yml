@@ -53,7 +53,7 @@ jobs:
       # run SonarQube
       - run:
           name: "Run SonarQube"
-          when: always
+          when: on_success
           command: mvn sonar:sonar -Dsonar.organization=svenbayer-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONARQUBE_TOKEN}
 
 #      - run:

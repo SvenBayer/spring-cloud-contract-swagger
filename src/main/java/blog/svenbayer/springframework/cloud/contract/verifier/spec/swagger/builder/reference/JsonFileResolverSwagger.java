@@ -24,14 +24,14 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 	@Override
 	public String resolveReference(Map<String, Model> definitions) {
 		Path swaggerFileFolder = SwaggerFileFolder.getSwaggerFileFolder();
-		File pathToRef = new File(swaggerFileFolder.toString(), reference);
+		File pathToRef = new File(swaggerFileFolder.toString(), this.reference);
 		if (!pathToRef.exists()) {
-			throw new SwaggerContractConverterException("Swagger file must only reference files that exist. Could not find file '" + reference + "'");
+			throw new SwaggerContractConverterException("Swagger file must only reference files that exist. Could not find file '" + this.reference + "'");
 		}
 		try {
 			return new String(Files.readAllBytes(pathToRef.toPath()));
 		} catch (IOException e) {
-			throw new SwaggerContractConverterException("Could not read external file '" + reference + "'");
+			throw new SwaggerContractConverterException("Could not read external file '" + this.reference + "'");
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 	 */
 	@Override
 	public String resolveReference(Map<String, Model> definitions) {
-		Map<String, Object> jsonMap = resolveDefinitionsRef(reference, definitions);
+		Map<String, Object> jsonMap = resolveDefinitionsRef(this.reference, definitions);
 		try {
 			ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 			String jsonString = mapper.writeValueAsString(jsonMap);
