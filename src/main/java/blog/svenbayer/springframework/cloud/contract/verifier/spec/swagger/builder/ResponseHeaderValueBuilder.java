@@ -28,6 +28,8 @@ public final class ResponseHeaderValueBuilder {
 	/**
 	 * Creates a dsl value for a response header property.
 	 *
+	 * Note: Pattern does not appear for Property types
+	 *
 	 * @param key the key of the header
 	 * @param property the response header property
 	 * @param definitions the Swagger model definition
@@ -35,8 +37,7 @@ public final class ResponseHeaderValueBuilder {
 	 */
 	public static DslProperty createDslResponseHeaderValue(String key, Property property, Map<String, Model> definitions) {
 		Object value = createResponseHeaderValue(key, property, definitions);
-		//TODO avoid default values
-		// TODO Pattern does not appear for Property types
+		// TODO avoid default values
 		return new DslProperty<>(value);
 	}
 
@@ -62,7 +63,7 @@ public final class ResponseHeaderValueBuilder {
 		if (property instanceof RefProperty) {
 			RefProperty refProperty = RefProperty.class.cast(property);
 			String ref = refProperty.get$ref();
-			SwaggerReferenceResolver resolver = refFactory.getReferenceResolver(refProperty.get$ref(), refProperty.getVendorExtensions());
+			SwaggerReferenceResolver resolver = refFactory.getReferenceResolver(ref, refProperty.getVendorExtensions());
 			return resolver.resolveReference(definitions);
 		}
 		if (property instanceof ArrayProperty) {
@@ -86,17 +87,15 @@ public final class ResponseHeaderValueBuilder {
 			}
 		}
 		return key;
-		//TODO return new MatchingTypeValue(MatchingType.REGEX, ".+");
 	}
 
 	/**
 	 * Creates a default numeric value for the given property
 	 *
-	 * @param property the numeric property
+	 * @param numeric the numeric property
 	 * @return the default value
 	 */
-	private static Object createDefaultNumericValue(AbstractNumericProperty property) {
-		AbstractNumericProperty numeric = property;
+	private static Object createDefaultNumericValue(AbstractNumericProperty numeric) {
 		BigDecimal numericPropertyValue = null;
 		if (numeric.getMinimum() != null) {
 			if (numeric.getExclusiveMinimum() != null && numeric.getExclusiveMinimum()) {
@@ -119,6 +118,17 @@ public final class ResponseHeaderValueBuilder {
 				return DEFAULT_FLOAT;
 			}
 		}
+		return getTypedNumericValue(numeric, numericPropertyValue);
+	}
+
+	/**
+	 * Returns the typed value for the given numeric property and value
+	 *
+	 * @param numeric the property
+	 * @param numericPropertyValue the value
+	 * @return the typed value
+	 */
+	private static Object getTypedNumericValue(AbstractNumericProperty numeric, BigDecimal numericPropertyValue) {
 		if (numeric instanceof LongProperty || numeric instanceof DecimalProperty
 				|| numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
 			if (numericPropertyValue != null) {
@@ -133,11 +143,9 @@ public final class ResponseHeaderValueBuilder {
 				}
 			} else {
 				return DEFAULT_INT;
-				//TODO return Pattern.compile("[0-9]+");
 			}
 		}
 		return DEFAULT_INT;
-		//TODO return Pattern.compile("[0-9]+");
 	}
 
 	/**

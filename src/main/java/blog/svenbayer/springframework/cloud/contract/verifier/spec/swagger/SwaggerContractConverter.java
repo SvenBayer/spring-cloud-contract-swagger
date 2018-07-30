@@ -61,7 +61,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		if (swagger == null || swagger.getPaths() == null) {
 			return Collections.emptyList();
 		}
-		SwaggerFileFolder.setSwaggerFileFolder(file.getParentFile().toPath());
+		SwaggerFileFolder.setPathToSwaggerFile(file.getParentFile().toPath());
 		final AtomicInteger priority = new AtomicInteger(1);
 		return swagger.getPaths().entrySet().stream()
 				.flatMap(pathEntry -> {
@@ -209,26 +209,23 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 			}
 		}
 
+		createRequestHeaders(swagger, operation, request);
+	}
+
+	/**
+	 * Creates headers for the request.
+	 *
+	 * @param swagger the Swagger document
+	 * @param operation the operation (GET, PUT, POST, DELETE)
+	 * @param request the contract request
+	 */
+	private void createRequestHeaders(Swagger swagger, Operation operation, Request request) {
 		request.headers(Closure.IDENTITY);
 		Headers requestHeaders = request.getHeaders();
 
 		if (operation.getParameters() != null) {
 			operation.getParameters().forEach(param -> {
-				if (param instanceof HeaderParameter) {
-					HeaderParameter headerParameter = HeaderParameter.class.cast(param);
-					DslProperty clientValue = DslValueBuilder.createDslValueForParameter(headerParameter);
-					if (clientValue != null && headerParameter.getName() != null) {
-						requestHeaders.header(headerParameter.getName(), clientValue);
-					}
-				}
-				// Cookie parameters are not supported by Swagger 2.0
-				if (param instanceof BodyParameter) {
-					BodyParameter bodyParameter = BodyParameter.class.cast(param);
-					String value = RequestBodyParamBuilder.createValueForRequestBody(bodyParameter, swagger.getDefinitions());
-					if (value != null) {
-						request.body(value);
-					}
-				}
+				createRequestHeaderBodyParameters(swagger, request, requestHeaders, param);
 			});
 		}
 		if (operation.getConsumes() != null) {
@@ -243,6 +240,32 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 	}
 
 	/**
+	 * Create the parameters for request header and body
+	 *
+	 * @param swagger the Swagger document
+	 * @param request the contract request
+	 * @param requestHeaders the contract headers
+	 * @param param the Swagger parameters
+	 */
+	private void createRequestHeaderBodyParameters(Swagger swagger, Request request, Headers requestHeaders, Parameter param) {
+		if (param instanceof HeaderParameter) {
+			HeaderParameter headerParameter = HeaderParameter.class.cast(param);
+			DslProperty clientValue = DslValueBuilder.createDslValueForParameter(headerParameter);
+			if (clientValue != null && headerParameter.getName() != null) {
+				requestHeaders.header(headerParameter.getName(), clientValue);
+			}
+		}
+		// Cookie parameters are not supported by Swagger 2.0
+		if (param instanceof BodyParameter) {
+			BodyParameter bodyParameter = BodyParameter.class.cast(param);
+			String value = RequestBodyParamBuilder.createValueForRequestBody(bodyParameter, swagger.getDefinitions());
+			if (value != null) {
+				request.body(value);
+			}
+		}
+	}
+
+	/**
 	 * This is not supported!
 	 *
 	 * @param contract the contract that will not be converted
@@ -250,7 +273,6 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 	 */
 	@Override
 	public Swagger convertTo(Collection<Contract> contract) {
-		// TODO conversion from Spring Cloud Contract to Swagger is not supported yet
 		return new Swagger();
 	}
 }

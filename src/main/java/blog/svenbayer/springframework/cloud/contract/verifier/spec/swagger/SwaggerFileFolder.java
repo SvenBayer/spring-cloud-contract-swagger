@@ -4,13 +4,16 @@ import java.nio.file.Path;
 
 public class SwaggerFileFolder {
 
-	private static Path swaggerFileFolder;
+	private static Path pathToSwaggerFile;
 
-	public static Path getSwaggerFileFolder() {
-		return swaggerFileFolder;
+	private SwaggerFileFolder() {
 	}
 
-	public static void setSwaggerFileFolder(Path swaggerFileFolder) {
-		SwaggerFileFolder.swaggerFileFolder = swaggerFileFolder;
+	public static Path getPathToSwaggerFile() {
+		return pathToSwaggerFile;
+	}
+
+	public static void setPathToSwaggerFile(Path pathToSwaggerFile) {
+		SwaggerFileFolder.pathToSwaggerFile = pathToSwaggerFile;
 	}
 }
