@@ -62,10 +62,10 @@ jobs:
           command: mvn -s ./.circleci/.circleci.settings.xml -DskipTests -Dmaven.install.skip deploy -Psnapshot
 
       - run:
-        name: "Integration Tests"
-        when: on_success
-        command: |
-          curl --user ${CIRCLE_API_PROJECT_TOKEN}: \
+          name: "Integration Tests"
+          when: on_success
+          command: |
+            curl --user ${CIRCLE_API_PROJECT_TOKEN}: \
               --header "Content-Type: application/json" \
               --request POST \
               https://circleci.com/api/v1.1/project/github/SvenBayer/spring-cloud-contract-swagger-sample/tree/master
