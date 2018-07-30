@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build_and_test:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -50,13 +50,38 @@ jobs:
           when: on_success
           command: bash <(curl -s https://codecov.io/bash)
 
+      - persist_to_workspace:
+        root: ~/repo
+
+  sonarqube:
+    - attach_workspace:
+      at: ~/repo
+
+    steps:
       # run SonarQube
       - run:
           name: "Run SonarQube"
           when: on_success
           command: mvn sonar:sonar -Dsonar.organization=svenbayer-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONARQUBE_TOKEN}
 
+  deploy:
+    - attach_workspace:
+      at: ~/repo
+
+    steps:
       - run:
           name: "Snapshot Deployment"
           when: on_success
           command: mvn -s ./.circleci/.circleci.settings.xml -DskipTests -Dmaven.install.skip deploy -Psnapshot
+
+workflows:
+  version: 2
+  build-test-sonarqube-deploy:
+    jobs:
+      - build_and_test
+      - sonarqube_job:
+        requires:
+          - build_and_test
+      - deploy_job:
+        requires:
+          - build_and_test
