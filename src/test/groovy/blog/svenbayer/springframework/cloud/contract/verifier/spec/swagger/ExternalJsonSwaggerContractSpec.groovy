@@ -17,7 +17,7 @@ class ExternalJsonSwaggerContractSpec extends Specification {
     SwaggerContractConverter converter = new SwaggerContractConverter()
     TestContractEquals testContractEquals = new TestContractEquals()
 
-    def "should convert from single swagger to contract"() {
+    def "should convert from swagger with external json to contract"() {
         given:
         File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/external_json/external_json_swagger.yml").toURI())
         Contract expectedContract = Contract.make {

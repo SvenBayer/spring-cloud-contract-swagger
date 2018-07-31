@@ -15,7 +15,7 @@ public class ReferenceResolverFactory {
 		if (vendorExtensions != null && vendorExtensions.get(X_REF.field()) != null) {
 			String refFile = String.valueOf(vendorExtensions.get(X_REF.field()));
 			String cleanedUpRefFile = refFile.replaceAll("\\.\\/", "");
-			return new JsonFileResolverSwagger(cleanedUpRefFile);
+			return new JsonFileResolverSwagger(cleanedUpRefFile, reference);
 		} else {
 			if (reference == null || reference.isEmpty()) {
 				throw new SwaggerContractConverterException("Swagger reference must not be null or empty!");
