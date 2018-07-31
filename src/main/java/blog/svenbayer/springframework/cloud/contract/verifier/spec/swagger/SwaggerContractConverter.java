@@ -224,9 +224,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		Headers requestHeaders = request.getHeaders();
 
 		if (operation.getParameters() != null) {
-			operation.getParameters().forEach(param -> {
-				createRequestHeaderBodyParameters(swagger, request, requestHeaders, param);
-			});
+			operation.getParameters().forEach(param -> createRequestHeaderBodyParameters(swagger, request, requestHeaders, param));
 		}
 		if (operation.getConsumes() != null) {
 			operation.getConsumes().forEach(contentType -> {

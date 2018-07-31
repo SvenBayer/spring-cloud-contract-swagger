@@ -25,6 +25,9 @@ public final class ResponseHeaderValueBuilder {
 
 	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
 
+	private ResponseHeaderValueBuilder() {
+	}
+
 	/**
 	 * Creates a dsl value for a response header property.
 	 *
