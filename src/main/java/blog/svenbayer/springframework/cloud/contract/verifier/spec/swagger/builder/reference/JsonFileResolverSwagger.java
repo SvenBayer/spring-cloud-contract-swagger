@@ -47,7 +47,7 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 			return;
 		}
 		String resolvedJson = this.refResolverSwagger.resolveReference(definitions);
-		boolean isJsonEquals = jsonSchemaComparer.isEquals(resolvedJson, externalJson);
+		boolean isJsonEquals = this.jsonSchemaComparer.isEquals(resolvedJson, externalJson);
 		if (!isJsonEquals) {
 			throw new SwaggerContractConverterException("Swagger definitions and Json file should be equal but was not for:\nExpected:\n"
 			+ resolvedJson + "\n\nActual:\n" + externalJson);

@@ -18,27 +18,26 @@ public class JsonKeyValuePair {
 		if (this == o) return true;
 		if (!(o instanceof JsonKeyValuePair)) return false;
 		JsonKeyValuePair that = (JsonKeyValuePair) o;
-		return Objects.equals(key, that.key) &&
-				Objects.equals(value, that.value);
+		return Objects.equals(this.key, that.key) &&
+				Objects.equals(this.value, that.value);
 	}
 
 	@Override
 	public int hashCode() {
-		//return Objects.hash(key, value);
 		int valueHashCode = 0;
-		if (value != null) {
-			valueHashCode = value.stream()
+		if (this.value != null) {
+			valueHashCode = this.value.stream()
 					.mapToInt(Object::hashCode)
 					.sum();
 		}
-		return Objects.hashCode(key) + valueHashCode;
+		return Objects.hashCode(this.key) + valueHashCode;
 	}
 
 	@Override
 	public String toString() {
 		return "JsonKeyValuePair{" +
-				"key='" + key + '\'' +
-				", value=" + value +
+				"key='" + this.key + '\'' +
+				", value=" + this.value +
 				'}';
 	}
 }

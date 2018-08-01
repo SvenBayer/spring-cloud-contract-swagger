@@ -22,12 +22,12 @@ public class JsonSchemaComparer {
 		JsonNode expectedNode;
 		JsonNode actualNode;
 		try {
-			expectedNode = mapper.readTree(expectedJson);
+			expectedNode = this.mapper.readTree(expectedJson);
 		} catch (IOException e) {
 			throw new SwaggerContractConverterException("Could not parse JSON of Swagger definitions!");
 		}
 		try {
-			actualNode = mapper.readTree(actualJson);
+			actualNode = this.mapper.readTree(actualJson);
 		} catch (IOException e) {
 			throw new SwaggerContractConverterException("Could not parse JSON of file!");
 		}
