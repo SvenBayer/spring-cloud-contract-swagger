@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -22,16 +23,18 @@ class SwaggerReferenceResolverFactoryTest {
 	@DisplayName("Fails to receive SwaggerReferenceResolver for null")
 	@Test
 	void failsforNull() {
-		assertThrows(SwaggerContractConverterException.class, () -> {
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			factory.getReferenceResolver(null, null);
 		});
+		assertEquals("Swagger reference must not be null or empty!", exception.getMessage());
 	}
 
 	@DisplayName("Fails to receive SwaggerReferenceResolver for empty string")
 	@Test
 	void failsForEmptyString() {
-		assertThrows(SwaggerContractConverterException.class, () -> {
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			factory.getReferenceResolver("", null);
 		});
+		assertEquals("Swagger reference must not be null or empty!", exception.getMessage());
 	}
 }

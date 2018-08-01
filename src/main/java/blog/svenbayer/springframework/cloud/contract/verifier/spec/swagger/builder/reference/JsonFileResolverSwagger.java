@@ -2,8 +2,7 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.buil
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.SwaggerFileFolder;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json.JsonSchemaComparer;
 import io.swagger.models.Model;
 
 import java.io.File;
@@ -18,12 +17,11 @@ import java.util.Map;
 public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 
 	private String referenceFile;
-	private String reference;
 	private SwaggerDefinitionsRefResolverSwagger refResolverSwagger;
+	private JsonSchemaComparer jsonSchemaComparer = new JsonSchemaComparer();
 
-	public JsonFileResolverSwagger(String referenceFile, String reference) {
+	JsonFileResolverSwagger(String referenceFile, String reference) {
 		this.referenceFile = referenceFile;
-		this.reference = reference;
 		this.refResolverSwagger = new SwaggerDefinitionsRefResolverSwagger(reference);
 	}
 
@@ -31,8 +29,8 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 	public String resolveReference(Map<String, Model> definitions) {
 		Path swaggerFileFolder = SwaggerFileFolder.getPathToSwaggerFile();
 		File pathToRef = new File(swaggerFileFolder.toString(), this.referenceFile);
-		if (!pathToRef.exists()) {
-			throw new SwaggerContractConverterException("Swagger file must only referenceFile files that exist. Could not find file '" + this.referenceFile + "'");
+		if (!pathToRef.exists() || pathToRef.isDirectory()) {
+			throw new SwaggerContractConverterException("Swagger file must only referenceFile files that exist. Could not find file '" + pathToRef + "'");
 		}
 		String externalJson;
 		try {
@@ -45,25 +43,14 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 	}
 
 	private void validateExternalJson(String externalJson, Map<String, Model> definitions) {
-		String resolvedJson = this.refResolverSwagger.resolveReference(definitions);
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode resolvedJsonNode;
-		JsonNode externalJsonNode;
-		try {
-			resolvedJsonNode = mapper.readTree(resolvedJson);
-			externalJsonNode = mapper.readTree(externalJson);
-		} catch (IOException e) {
-			throw new SwaggerContractConverterException("Could not validate json schema!", e);
+		if (definitions == null || definitions.isEmpty()) {
+			return;
 		}
-		resolvedJsonNode.fieldNames().forEachRemaining(name -> {
-			if(externalJsonNode.findValues(name).isEmpty()) {
-				throw new SwaggerContractConverterException("External JSON file '" + externalJson + "' does not contain field '" + name + "' in Swagger definition '" + this.reference + "'");
-			}
-		});
-		externalJsonNode.fieldNames().forEachRemaining(name -> {
-			if (resolvedJsonNode.findValues(name).isEmpty()) {
-				throw new SwaggerContractConverterException("Swagger Definitions '" + this.reference + "' does not contain field'" + name + "' in external JSON file '" + externalJson + "'");
-			}
-		});
+		String resolvedJson = this.refResolverSwagger.resolveReference(definitions);
+		boolean isJsonEquals = jsonSchemaComparer.isEquals(resolvedJson, externalJson);
+		if (!isJsonEquals) {
+			throw new SwaggerContractConverterException("Swagger definitions and Json file should be equal but was not for:\nExpected:\n"
+			+ resolvedJson + "\n\nActual:\n" + externalJson);
+		}
 	}
 }

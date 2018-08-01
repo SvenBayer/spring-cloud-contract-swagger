@@ -1,0 +1,14 @@
+{
+  "beanonauts" : [ {
+    "name" : "A name",
+    "age" : 99
+  } ],
+  "boxes" : [ "A lot" ],
+  "fuel" : 200.34,
+  "weight" : 403.23,
+  "itinerary" : {
+    "destination" : "Pluto",
+    "departure" : "Jupiter"
+  },
+  "rocketName" : "Falkon V"
+}

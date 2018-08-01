@@ -1,0 +1,15 @@
+{
+  "beanonauts" : [ {
+    "name" : "Bean Beanos",
+    "age" : 30,
+    "height" : 180
+  } ],
+  "boxes" : [ "crates" ],
+  "fuel" : 1.1,
+  "weight" : 1.1,
+  "itinerary" : {
+    "destination" : "Moon",
+    "departure" : "Earth"
+  },
+  "rocketName" : "Apollo ll"
+}
