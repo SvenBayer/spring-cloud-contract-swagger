@@ -5,9 +5,9 @@ import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.build
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,18 +20,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Sven Bayer
  */
-class JsonSchemaComparingTest {
+public class JsonSchemaComparingTest {
 
 	private JsonSchemaComparing jsonSchemaComparing;
 
-	@BeforeEach
-	void init() {
+	@Before
+	public void init() {
 		jsonSchemaComparing = new JsonSchemaComparing();
 	}
 
 	@DisplayName("Should be true for equal Jsons")
 	@Test
-	void equalJsons() throws IOException {
+	public void equalJsons() throws IOException {
 		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
 		String json = new String(Files.readAllBytes(jsonFile.toPath()));
 		assertTrue(jsonSchemaComparing.isEquals(json, json), "Same json files should be equals!");
@@ -39,7 +39,7 @@ class JsonSchemaComparingTest {
 
 	@DisplayName("Should be true for equal Jsons with different values")
 	@Test
-	void equalJsonsDifferentValues() throws IOException {
+	public void equalJsonsDifferentValues() throws IOException {
 		File expectedJsonFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withDifferentValues/CoffeeRocket1.json");
 		String expectedJson = new String(Files.readAllBytes(expectedJsonFile.toPath()));
 
@@ -51,7 +51,7 @@ class JsonSchemaComparingTest {
 
 	@DisplayName("Should be false for different Json files")
 	@Test
-	void differentJsonFiles() throws IOException {
+	public void differentJsonFiles() throws IOException {
 		File expectedJsonFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withDifferentJsons/CoffeeRocket1.json");
 		String expectedJson = new String(Files.readAllBytes(expectedJsonFile.toPath()));
 
@@ -63,7 +63,7 @@ class JsonSchemaComparingTest {
 
 	@DisplayName("Json file and Swagger definitions should be equal")
 	@Test
-	void equalJsonFileAndSwaggerDefinitions() throws IOException {
+	public void equalJsonFileAndSwaggerDefinitions() throws IOException {
 		File swaggerFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/external_json_swagger.yml");
 		Swagger swagger = new SwaggerParser().read(swaggerFile.getPath());
 		Map<String, Model> definitions = swagger.getDefinitions();
@@ -78,7 +78,7 @@ class JsonSchemaComparingTest {
 
 	@DisplayName("Should be not equal for Json with more fields than Swagger definitions")
 	@Test
-	void withJsonMoreFields() throws IOException {
+	public void withJsonMoreFields() throws IOException {
 		File swaggerFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withJsonMoreFields/external_json_swagger.yml");
 		Swagger swagger = new SwaggerParser().read(swaggerFile.getPath());
 		Map<String, Model> definitions = swagger.getDefinitions();
@@ -93,7 +93,7 @@ class JsonSchemaComparingTest {
 
 	@DisplayName("Should be not equal for Swagger definitions with more fields than Json")
 	@Test
-	void withSwaggerMoreFields() throws IOException {
+	public void withSwaggerMoreFields() throws IOException {
 		File swaggerFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withSwaggerMoreFields/external_json_swagger.yml");
 		Swagger swagger = new SwaggerParser().read(swaggerFile.getPath());
 		Map<String, Model> definitions = swagger.getDefinitions();

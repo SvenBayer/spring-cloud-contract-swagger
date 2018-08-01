@@ -20,7 +20,7 @@ class JsonFileResolverSwaggerTest {
 
 	@DisplayName("Should throw exception for not existing path")
 	@Test
-	void notExistingPath() {
+	public void notExistingPath() {
 		SwaggerFileFolder.setPathToSwaggerFile(Paths.get(""));
 		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("doesNotExist", "doesNotMatterForThisTest");
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
@@ -31,7 +31,7 @@ class JsonFileResolverSwaggerTest {
 
 	@DisplayName("Should throw exception for directory")
 	@Test
-	void directory() {
+	public void directory() {
 		SwaggerFileFolder.setPathToSwaggerFile(Paths.get(""));
 		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("target", "doesNotMatterForThisTest");
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {

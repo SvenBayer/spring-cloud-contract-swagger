@@ -2,8 +2,8 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.buil
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import io.swagger.models.HttpMethod;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Sven Bayer
  */
-class ContractNameBuilderTest {
+public class ContractNameBuilderTest {
 
 	@DisplayName("Escapes path for Contract name with path parameter and slashes")
 	@Test
-	void escapePathForContractName() {
+	public void escapePathForContractName() {
 		String pathName = "/find/planets/{solarSystem}/{system}";
 		AtomicInteger priority = new AtomicInteger(1);
 		HttpMethod post = HttpMethod.POST;
@@ -27,7 +27,7 @@ class ContractNameBuilderTest {
 
 	@DisplayName("Expect Exception for empty Contract path")
 	@Test
-	void expectExceptionForEmptyPath() {
+	public void expectExceptionForEmptyPath() {
 		String pathName = "";
 		AtomicInteger priority = new AtomicInteger(1);
 		HttpMethod post = HttpMethod.POST;
