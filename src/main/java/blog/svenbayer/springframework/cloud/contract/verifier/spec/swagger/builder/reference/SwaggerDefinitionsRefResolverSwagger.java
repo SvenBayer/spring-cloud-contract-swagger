@@ -50,6 +50,12 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 		}
 	}
 
+	/**
+	 * Cleans up a json-fied Json string.
+	 *
+	 * @param jsonString the Json string that got mapped to often by ObjectMapper
+	 * @return the cleaned-up Json string
+	 */
 	private String cleanupJson(String jsonString) {
 		for (Map.Entry<String, String> repl : REPLACEMENTS.entrySet()){
 			jsonString = jsonString.replaceAll(repl.getKey(), repl.getValue());
@@ -57,6 +63,13 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 		return jsonString;
 	}
 
+	/**
+	 * Resolves a Swagger reference with the given Swagger definitions.
+	 *
+	 * @param reference the Swagger reference
+	 * @param definitions the Swagger definitions
+	 * @return the key-value representation of the Swagger reference
+	 */
 	private Map<String, Object> resolveDefinitionsRef(String reference, Map<String, Model> definitions) {
 		String referenceName = reference.substring(reference.lastIndexOf('/') + 1);
 		return definitions.get(referenceName).getProperties().entrySet().stream()

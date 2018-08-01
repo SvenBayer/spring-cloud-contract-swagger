@@ -17,13 +17,16 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class JsonSchemaComparerTest {
+/**
+ * @author Sven Bayer
+ */
+class JsonSchemaComparingTest {
 
-	private JsonSchemaComparer jsonSchemaComparer;
+	private JsonSchemaComparing jsonSchemaComparing;
 
 	@BeforeEach
 	void init() {
-		jsonSchemaComparer = new JsonSchemaComparer();
+		jsonSchemaComparing = new JsonSchemaComparing();
 	}
 
 	@DisplayName("Should be true for equal Jsons")
@@ -31,7 +34,7 @@ class JsonSchemaComparerTest {
 	void equalJsons() throws IOException {
 		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
 		String json = new String(Files.readAllBytes(jsonFile.toPath()));
-		assertTrue(jsonSchemaComparer.isEquals(json, json), "Same json files should be equals!");
+		assertTrue(jsonSchemaComparing.isEquals(json, json), "Same json files should be equals!");
 	}
 
 	@DisplayName("Should be true for equal Jsons with different values")
@@ -43,7 +46,7 @@ class JsonSchemaComparerTest {
 		File actualJsonFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withDifferentValues/CoffeeRocket2.json");
 		String actualJson = new String(Files.readAllBytes(actualJsonFile.toPath()));
 
-		assertTrue(jsonSchemaComparer.isEquals(expectedJson, actualJson), "Same json files with differnet values should be equals!");
+		assertTrue(jsonSchemaComparing.isEquals(expectedJson, actualJson), "Same json files with differnet values should be equals!");
 	}
 
 	@DisplayName("Should be false for different Json files")
@@ -55,7 +58,7 @@ class JsonSchemaComparerTest {
 		File actualJsonFile = TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withDifferentJsons/CoffeeRocket2.json");
 		String actualJson = new String(Files.readAllBytes(actualJsonFile.toPath()));
 
-		assertFalse(jsonSchemaComparer.isEquals(expectedJson, actualJson), "Different Jsons should result in false!");
+		assertFalse(jsonSchemaComparing.isEquals(expectedJson, actualJson), "Different Jsons should result in false!");
 	}
 
 	@DisplayName("Json file and Swagger definitions should be equal")
@@ -70,7 +73,7 @@ class JsonSchemaComparerTest {
 		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
 		String actualJson = new String(Files.readAllBytes(jsonFile.toPath()));
 
-		assertTrue(jsonSchemaComparer.isEquals(expectedJson, actualJson), "Json from Swagger definitions and Json file should be equal!");
+		assertTrue(jsonSchemaComparing.isEquals(expectedJson, actualJson), "Json from Swagger definitions and Json file should be equal!");
 	}
 
 	@DisplayName("Should be not equal for Json with more fields than Swagger definitions")
@@ -85,7 +88,7 @@ class JsonSchemaComparerTest {
 		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withJsonMoreFields/CoffeeRocket.json");
 		String actualJson = new String(Files.readAllBytes(jsonFile.toPath()));
 
-		assertFalse(jsonSchemaComparer.isEquals(expectedJson, actualJson), "Json file with more fields than Swagger definitions should be false!");
+		assertFalse(jsonSchemaComparing.isEquals(expectedJson, actualJson), "Json file with more fields than Swagger definitions should be false!");
 	}
 
 	@DisplayName("Should be not equal for Swagger definitions with more fields than Json")
@@ -100,6 +103,6 @@ class JsonSchemaComparerTest {
 		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withSwaggerMoreFields/CoffeeRocket.json");
 		String actualJson = new String(Files.readAllBytes(jsonFile.toPath()));
 
-		assertFalse(jsonSchemaComparer.isEquals(expectedJson, actualJson), "Swagger definitions with more fields than Json file should be false!");
+		assertFalse(jsonSchemaComparing.isEquals(expectedJson, actualJson), "Swagger definitions with more fields than Json file should be false!");
 	}
 }

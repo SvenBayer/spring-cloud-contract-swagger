@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.*;
 
 /**
+ * Builds pattern for matching in contract tests.
+ *
  * @author Sven Bayer
  */
 class PatternBuilder {

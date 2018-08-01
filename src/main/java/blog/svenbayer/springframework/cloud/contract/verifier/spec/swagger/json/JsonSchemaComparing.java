@@ -12,12 +12,21 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Compares two Jsons if they have the same schema.
+ *
  * @author Sven Bayer
  */
-public class JsonSchemaComparer {
+public class JsonSchemaComparing {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
+	/**
+	 * Compares two Jsons if they have the same schema. Does this not already exist? Are we re-inventing the wheel???
+	 *
+	 * @param expectedJson the expected Json
+	 * @param actualJson the actual Json
+	 * @return true if the Json schemas are equal
+	 */
 	public boolean isEquals(String expectedJson, String actualJson) {
 		JsonNode expectedNode;
 		JsonNode actualNode;
@@ -34,12 +43,26 @@ public class JsonSchemaComparer {
 		return isEquals(expectedNode, actualNode);
 	}
 
+	/**
+	 * Compares two JsonNodes if their schema is equal.
+	 *
+	 * @param expectedJsonSchema the expected JsonNode
+	 * @param actualJsonSchema the actual JsonNode
+	 * @return true if the schema of both JsonNodes is equal
+	 */
 	private boolean isEquals(JsonNode expectedJsonSchema, JsonNode actualJsonSchema) {
 		Set<JsonKeyValuePair> expectedJsonMap = mapNode("root", expectedJsonSchema);
 		Set<JsonKeyValuePair> actualJsonMap = mapNode("root", actualJsonSchema);
 		return expectedJsonMap.containsAll(actualJsonMap);
 	}
 
+	/**
+	 * Maps a JsonNode to a key-value representation that ignores values.
+	 *
+	 * @param name the name of the key
+	 * @param node the Json node value
+	 * @return the mapped key-value Set of the key and Json node value
+	 */
 	private Set<JsonKeyValuePair> mapNode(String name, JsonNode node) {
 		Set<JsonKeyValuePair> elements = new HashSet<>();
 		Iterator<Map.Entry<String, JsonNode>> iteratorFields = node.fields();

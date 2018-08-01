@@ -31,8 +31,9 @@ class ContractNameBuilderTest {
 		String pathName = "";
 		AtomicInteger priority = new AtomicInteger(1);
 		HttpMethod post = HttpMethod.POST;
-		assertThrows(SwaggerContractConverterException.class, () -> {
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			ContractNameBuilder.createContractName(priority, pathName, post);
 		});
+		assertEquals("Could not extract path of method from Swagger file: ", exception.getMessage());
 	}
 }

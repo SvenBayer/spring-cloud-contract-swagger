@@ -20,6 +20,11 @@ public enum SwaggerTypes {
 		this.swaggerType = type;
 	}
 
+	/**
+	 * Returns the Swagger type as string.
+	 *
+	 * @return the Swagger type
+	 */
 	public String type() {
 		return this.swaggerType;
 	}

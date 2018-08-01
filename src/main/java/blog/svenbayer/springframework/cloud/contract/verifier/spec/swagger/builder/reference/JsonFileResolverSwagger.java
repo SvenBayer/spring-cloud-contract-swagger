@@ -2,7 +2,7 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.buil
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.SwaggerFileFolder;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
-import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json.JsonSchemaComparer;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json.JsonSchemaComparing;
 import io.swagger.models.Model;
 
 import java.io.File;
@@ -12,13 +12,15 @@ import java.nio.file.Path;
 import java.util.Map;
 
 /**
+ * Resolves external Json files that are referenced with x-ref fields in a Swagger document.
+ *
  * @author Sven Bayer
  */
 public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 
 	private String referenceFile;
 	private SwaggerDefinitionsRefResolverSwagger refResolverSwagger;
-	private JsonSchemaComparer jsonSchemaComparer = new JsonSchemaComparer();
+	private JsonSchemaComparing jsonSchemaComparing = new JsonSchemaComparing();
 
 	JsonFileResolverSwagger(String referenceFile, String reference) {
 		this.referenceFile = referenceFile;
@@ -42,12 +44,18 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 		return externalJson;
 	}
 
+	/**
+	 * Validates if the given Json from the external Json file matches the Swagger model definitions.
+	 *
+	 * @param externalJson the external Json
+	 * @param definitions the Swagger model definitions
+	 */
 	private void validateExternalJson(String externalJson, Map<String, Model> definitions) {
 		if (definitions == null || definitions.isEmpty()) {
 			return;
 		}
 		String resolvedJson = this.refResolverSwagger.resolveReference(definitions);
-		boolean isJsonEquals = this.jsonSchemaComparer.isEquals(resolvedJson, externalJson);
+		boolean isJsonEquals = this.jsonSchemaComparing.isEquals(resolvedJson, externalJson);
 		if (!isJsonEquals) {
 			throw new SwaggerContractConverterException("Swagger definitions and Json file should be equal but was not for:\nExpected:\n"
 			+ resolvedJson + "\n\nActual:\n" + externalJson);

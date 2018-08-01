@@ -3,12 +3,17 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * A Json key-value representation.
+ *
+ * @author Sven Bayer
+ */
 public class JsonKeyValuePair {
 
 	private String key;
 	private Set<JsonKeyValuePair> value;
 
-	public JsonKeyValuePair(String key, Set<JsonKeyValuePair> value) {
+	JsonKeyValuePair(String key, Set<JsonKeyValuePair> value) {
 		this.key = key;
 		this.value = value;
 	}

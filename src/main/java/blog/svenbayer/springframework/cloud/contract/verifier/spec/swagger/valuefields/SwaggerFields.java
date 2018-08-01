@@ -16,6 +16,11 @@ public enum SwaggerFields {
 		this.swaggerField = field;
 	}
 
+	/**
+	 * Returns the string representation of the Swagger field.
+	 *
+	 * @return the Swagger field
+	 */
 	public String field() {
 		return this.swaggerField;
 	}
