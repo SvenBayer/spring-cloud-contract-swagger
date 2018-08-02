@@ -27,7 +27,7 @@ class JsonFileResolverSwaggerTest {
 	@DisplayName("Should throw exception for not existing path")
 	@Test
 	public void notExistingPath() {
-		SwaggerFileFolder.setPathToSwaggerFile(Paths.get(""));
+		SwaggerFileFolder.instance().setPathToSwaggerFile(Paths.get(""));
 		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("doesNotExist", "doesNotMatterForThisTest");
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			resolver.resolveReference(new HashMap<>());
@@ -38,7 +38,7 @@ class JsonFileResolverSwaggerTest {
 	@DisplayName("Should throw exception for directory")
 	@Test
 	public void directory() {
-		SwaggerFileFolder.setPathToSwaggerFile(Paths.get(""));
+		SwaggerFileFolder.instance().setPathToSwaggerFile(Paths.get(""));
 		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("target", "doesNotMatterForThisTest");
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			resolver.resolveReference(new HashMap<>());
@@ -51,7 +51,7 @@ class JsonFileResolverSwaggerTest {
 	void ignoreComparison() throws IOException {
 		String expectedJson = TestFileResourceLoader.getResourceAsString("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
 
-		SwaggerFileFolder.setPathToSwaggerFile(TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/").toPath());
+		SwaggerFileFolder.instance().setPathToSwaggerFile(TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/").toPath());
 		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("CoffeeRocket.json", "doesNotMatterForThisTest");
 		String actualJson = resolver.resolveReference(null);
 
@@ -60,8 +60,8 @@ class JsonFileResolverSwaggerTest {
 
 	@DisplayName("Should throw exception for not equal jsons")
 	@Test
-	public void notEqualJsons() throws IOException {
-		SwaggerFileFolder.setPathToSwaggerFile(TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withJsonMoreFields/").toPath());
+	public void notEqualJsons() {
+		SwaggerFileFolder.instance().setPathToSwaggerFile(TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withJsonMoreFields/").toPath());
 		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("CoffeeRocket.json", "#/definitions/CoffeeRocket");
 
 		HashMap<String, Model> definitions = new HashMap<>();

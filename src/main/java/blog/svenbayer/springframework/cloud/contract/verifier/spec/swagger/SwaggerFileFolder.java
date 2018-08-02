@@ -9,16 +9,24 @@ import java.nio.file.Path;
  */
 public class SwaggerFileFolder {
 
-	private static Path pathToSwaggerFile;
+	private static SwaggerFileFolder swaggerFileFolder;
+	private Path pathToSwaggerFile;
 
 	private SwaggerFileFolder() {
 	}
 
-	public static Path getPathToSwaggerFile() {
-		return pathToSwaggerFile;
+	public static SwaggerFileFolder instance() {
+		if (swaggerFileFolder == null) {
+			swaggerFileFolder = new SwaggerFileFolder();
+		}
+		return swaggerFileFolder;
 	}
 
-	public static void setPathToSwaggerFile(Path pathToSwaggerFile) {
-		SwaggerFileFolder.pathToSwaggerFile = pathToSwaggerFile;
+	public Path getPathToSwaggerFile() {
+		return this.pathToSwaggerFile;
+	}
+
+	public void setPathToSwaggerFile(Path pathToSwaggerFile) {
+		this.pathToSwaggerFile = pathToSwaggerFile;
 	}
 }

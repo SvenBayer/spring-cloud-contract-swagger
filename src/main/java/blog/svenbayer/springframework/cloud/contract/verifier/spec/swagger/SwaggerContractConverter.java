@@ -33,6 +33,8 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 
 	private static final String TAG_SEP = "_";
 
+	private ResponseHeaderValueBuilder responseHeaderValueBuilder = new ResponseHeaderValueBuilder();
+
 	/**
 	 * Checks if the given file is a Swagger file.
 	 *
@@ -61,7 +63,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		if (swagger == null || swagger.getPaths() == null) {
 			return Collections.emptyList();
 		}
-		SwaggerFileFolder.setPathToSwaggerFile(file.getParentFile().toPath());
+		SwaggerFileFolder.instance().setPathToSwaggerFile(file.getParentFile().toPath());
 		final AtomicInteger priority = new AtomicInteger(1);
 		return swagger.getPaths().entrySet().stream()
 				.flatMap(pathEntry -> {
@@ -147,7 +149,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		if (responseEntry.getValue().getHeaders() != null) {
 			responseEntry.getValue().getHeaders().forEach((key, value) -> {
 				if (key != null) {
-					DslProperty serverValue = ResponseHeaderValueBuilder.createDslResponseHeaderValue(key, value, swagger.getDefinitions());
+					DslProperty serverValue = this.responseHeaderValueBuilder.createDslResponseHeaderValue(key, value, swagger.getDefinitions());
 					responseHeaders.header(key, serverValue);
 				}
 			});

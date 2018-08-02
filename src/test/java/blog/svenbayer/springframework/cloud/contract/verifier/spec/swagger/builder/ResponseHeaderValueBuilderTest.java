@@ -1,21 +1,32 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
 import io.swagger.models.properties.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_INT;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseHeaderValueBuilderTest {
+
+	private ResponseHeaderValueBuilder responseHeaderValueBuilder;
+
+	@Before
+	public void init() {
+		responseHeaderValueBuilder = new ResponseHeaderValueBuilder();
+	}
 
 	@DisplayName("Default value for Double")
 	@Test
 	public void defaultValueForDouble() {
 		DoubleProperty property = new DoubleProperty();
 		property.setDefault(3.2d);
-		Object defaultValue = ResponseHeaderValueBuilder.getDefaultValue(property);
+		Object defaultValue = responseHeaderValueBuilder.getDefaultValue(property);
 		assertEquals(3.2d, defaultValue);
 	}
 
@@ -24,7 +35,7 @@ public class ResponseHeaderValueBuilderTest {
 	public void defaultValueForFloat() {
 		FloatProperty property = new FloatProperty();
 		property.setDefault(3.3f);
-		Object defaultValue = ResponseHeaderValueBuilder.getDefaultValue(property);
+		Object defaultValue = responseHeaderValueBuilder.getDefaultValue(property);
 		assertEquals(3.3f, defaultValue);
 	}
 
@@ -33,7 +44,7 @@ public class ResponseHeaderValueBuilderTest {
 	public void defaultValueForLong() {
 		LongProperty property = new LongProperty();
 		property.setDefault(4L);
-		Object defaultValue = ResponseHeaderValueBuilder.getDefaultValue(property);
+		Object defaultValue = responseHeaderValueBuilder.getDefaultValue(property);
 		assertEquals(4L, defaultValue);
 	}
 
@@ -42,7 +53,7 @@ public class ResponseHeaderValueBuilderTest {
 	public void defaultValueForInteger() {
 		IntegerProperty property = new IntegerProperty();
 		property.setDefault(5);
-		Object defaultValue = ResponseHeaderValueBuilder.getDefaultValue(property);
+		Object defaultValue = responseHeaderValueBuilder.getDefaultValue(property);
 		assertEquals(5, defaultValue);
 	}
 
@@ -51,7 +62,7 @@ public class ResponseHeaderValueBuilderTest {
 	public void defaultValueForBoolean() {
 		BooleanProperty property = new BooleanProperty();
 		property.setDefault(false);
-		Object defaultValue = ResponseHeaderValueBuilder.getDefaultValue(property);
+		Object defaultValue = responseHeaderValueBuilder.getDefaultValue(property);
 		assertEquals(false, defaultValue);
 	}
 
@@ -60,69 +71,15 @@ public class ResponseHeaderValueBuilderTest {
 	public void defaultValueForString() {
 		StringProperty property = new StringProperty();
 		property.setDefault("a text");
-		Object defaultValue = ResponseHeaderValueBuilder.getDefaultValue(property);
+		Object defaultValue = responseHeaderValueBuilder.getDefaultValue(property);
 		assertEquals("a text", defaultValue);
 	}
 
-	@DisplayName("Typed numeric value for Long")
+	@DisplayName("Response header for ArrayProperty")
 	@Test
-	public void typedNumericForLong() {
-		LongProperty property = new LongProperty();
-		BigDecimal value = new BigDecimal(5);
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, value);
-		assertEquals(5L, actualValue);
-	}
-
-	@DisplayName("Typed numeric value for Integer")
-	@Test
-	public void typedNumericForInteger() {
-		IntegerProperty property = new IntegerProperty();
-		BigDecimal value = new BigDecimal(8);
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, value);
-		assertEquals(8, actualValue);
-	}
-
-	@DisplayName("Typed numeric value for BaseInteger")
-	@Test
-	public void typedNumericForBaseInteger() {
-		BaseIntegerProperty property = new BaseIntegerProperty();
-		BigDecimal value = new BigDecimal(9);
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, value);
-		assertEquals(9, actualValue);
-	}
-
-	@DisplayName("Typed numeric value for Double")
-	@Test
-	public void typedNumericForDouble() {
-		DoubleProperty property = new DoubleProperty();
-		BigDecimal value = new BigDecimal(3.21d);
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, value);
-		assertEquals(3.21d, actualValue);
-	}
-
-	@DisplayName("Typed numeric value for Float")
-	@Test
-	public void typedNumericForFloat() {
-		FloatProperty property = new FloatProperty();
-		BigDecimal value = new BigDecimal(2.67f);
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, value);
-		assertEquals(2.67f, actualValue);
-	}
-
-	@DisplayName("Typed numeric value for Decimal")
-	@Test
-	public void typedNumericForDecimal() {
-		DecimalProperty property = new DecimalProperty();
-		BigDecimal value = new BigDecimal(4);
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, value);
-		assertEquals(new BigDecimal(4), actualValue);
-	}
-
-	@DisplayName("Typed numeric value for no default value")
-	@Test
-	public void typedNumericForNoDefaultValue() {
-		DecimalProperty property = new DecimalProperty();
-		Object actualValue = ResponseHeaderValueBuilder.getTypedNumericValue(property, null);
-		assertEquals(1, actualValue);
+	public void createResponseHeaderValue() {
+		ArrayProperty property = new ArrayProperty();
+		Object defaultValue = responseHeaderValueBuilder.createResponseHeaderValue("key", property, new HashMap<>());
+		assertEquals(new ArrayList<>(Collections.singleton(DEFAULT_INT)), defaultValue);
 	}
 }

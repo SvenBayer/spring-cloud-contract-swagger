@@ -18,6 +18,8 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 
 	private static final Map<String, String> REPLACEMENTS = new HashMap<>();
 
+	private ResponseHeaderValueBuilder responseHeaderValueBuilder = new ResponseHeaderValueBuilder();
+
 	static {
 		REPLACEMENTS.put("\\\\n", "\n");
 		REPLACEMENTS.put("\\\\\"", "\"");
@@ -76,6 +78,6 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 			throw new SwaggerContractConverterException("Could not resolve reference '" + reference + "'");
 		}
 		return definitions.get(referenceName).getProperties().entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, entry -> ResponseHeaderValueBuilder.createResponseHeaderValue(entry.getKey(), entry.getValue(), definitions)));
+				.collect(Collectors.toMap(Map.Entry::getKey, entry -> this.responseHeaderValueBuilder.createResponseHeaderValue(entry.getKey(), entry.getValue(), definitions)));
 	}
 }

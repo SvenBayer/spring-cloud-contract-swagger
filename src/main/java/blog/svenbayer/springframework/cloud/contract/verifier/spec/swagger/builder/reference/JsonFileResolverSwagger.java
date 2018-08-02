@@ -29,7 +29,7 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 
 	@Override
 	public String resolveReference(Map<String, Model> definitions) {
-		Path swaggerFileFolder = SwaggerFileFolder.getPathToSwaggerFile();
+		Path swaggerFileFolder = SwaggerFileFolder.instance().getPathToSwaggerFile();
 		File pathToRef = new File(swaggerFileFolder.toString(), this.referenceFile);
 		if (!pathToRef.exists() || pathToRef.isDirectory()) {
 			throw new SwaggerContractConverterException("Swagger file must only referenceFile files that exist. Could not find file '" + pathToRef + "'");
