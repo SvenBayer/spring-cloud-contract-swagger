@@ -84,7 +84,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void unknownPropertyType() {
 		AbstractNumericProperty property = new AbstractNumericProperty() {};
-		Object actualValue = builder.getTypedNumericValue(property, null);
+		Object actualValue = builder.getTypedNumericValue(property, new BigDecimal(1));
 		assertEquals(1, actualValue);
 	}
 }

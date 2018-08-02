@@ -172,7 +172,6 @@ public class DslValueBuilderTest {
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
 
-
 	@DisplayName("Dsl Value for string and not pattern")
 	@Test
 	public void stringNoPatternNoExample() {
@@ -181,5 +180,18 @@ public class DslValueBuilderTest {
 		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile(".+"), "string");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
+	}
+
+	@DisplayName("Dsl Value for string and pattern does not match")
+	@Test
+	public void stringButPatternDoesNotMatch() {
+		QueryParameter swaggerQueryParam = new QueryParameter();
+		swaggerQueryParam.setType(STRING.type());
+		swaggerQueryParam.setPattern("[0-9]+");
+		swaggerQueryParam.setName("paramName");
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		});
+		assertEquals("The pattern '[0-9]+' does not match for the value 'paramName' for the given param 'paramName'", exception.getMessage());
 	}
 }

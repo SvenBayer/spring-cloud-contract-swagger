@@ -49,8 +49,8 @@ public final class DslValueBuilder {
 		}
 		boolean isPatternMatches = pattern.matcher(String.valueOf(value)).matches();
 		if (!isPatternMatches) {
-			throw new IllegalStateException("The pattern '" + pattern.pattern() + "' does not match for the value '"
-					+ value + "' for the given param '" + param + "'");
+			throw new SwaggerContractConverterException("The pattern '" + pattern.pattern() + "' does not match for the value '"
+					+ value + "' for the given param '" + param.getName() + "'");
 		}
 		return new DslProperty<>(pattern, value);
 	}
