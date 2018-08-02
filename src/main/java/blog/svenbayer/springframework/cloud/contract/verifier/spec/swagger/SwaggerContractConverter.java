@@ -34,6 +34,10 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 	private static final String TAG_SEP = "_";
 
 	private ResponseHeaderValueBuilder responseHeaderValueBuilder = new ResponseHeaderValueBuilder();
+	private RequestBodyParamBuilder requestBodyParamBuilder = new RequestBodyParamBuilder();
+	private ResponseBodyBuilder responseBodyBuilder = new ResponseBodyBuilder();
+	private DslValueBuilder dslValueBuilder = new DslValueBuilder();
+	private ContractNameBuilder contractNameBuilder = new ContractNameBuilder();
 
 	/**
 	 * Checks if the given file is a Swagger file.
@@ -109,7 +113,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 	private void createMetaData(AtomicInteger priority, String pathLink, Map.Entry<HttpMethod, Operation> operationEntry, Contract contract) {
 		Operation operation = operationEntry.getValue();
 
-		String contractName = ContractNameBuilder.createContractName(priority, pathLink, operationEntry.getKey());
+		String contractName = this.contractNameBuilder.createContractName(priority, pathLink, operationEntry.getKey());
 		contract.setName(contractName);
 
 		if (operation.getDescription() != null) {
@@ -166,7 +170,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 
 		// Cookie parameters are not supported by Swagger 2.0 ?
 		if (responseEntry.getValue().getResponseSchema() != null) {
-			String bodyValue = ResponseBodyBuilder.createValueForResponseBody(responseEntry.getValue(), swagger.getDefinitions());
+			String bodyValue = this.responseBodyBuilder.createValueForResponseBody(responseEntry.getValue(), swagger.getDefinitions());
 			response.body(bodyValue);
 		}
 	}
@@ -203,7 +207,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 						.filter(param -> param instanceof QueryParameter)
 						.map(AbstractSerializableParameter.class::cast)
 						.forEach(param -> {
-							DslProperty<Object> value = DslValueBuilder.createDslValueForParameter(param);
+							DslProperty<Object> value = this.dslValueBuilder.createDslValueForParameter(param);
 							if (value != null) {
 								queryParameters.parameter(param.getName(), value);
 							}
@@ -250,7 +254,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 	private void createRequestHeaderBodyParameters(Swagger swagger, Request request, Headers requestHeaders, Parameter param) {
 		if (param instanceof HeaderParameter) {
 			HeaderParameter headerParameter = HeaderParameter.class.cast(param);
-			DslProperty clientValue = DslValueBuilder.createDslValueForParameter(headerParameter);
+			DslProperty clientValue = this.dslValueBuilder.createDslValueForParameter(headerParameter);
 			if (clientValue != null && headerParameter.getName() != null) {
 				requestHeaders.header(headerParameter.getName(), clientValue);
 			}
@@ -258,7 +262,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		// Cookie parameters are not supported by Swagger 2.0
 		if (param instanceof BodyParameter) {
 			BodyParameter bodyParameter = BodyParameter.class.cast(param);
-			String value = RequestBodyParamBuilder.createValueForRequestBody(bodyParameter, swagger.getDefinitions());
+			String value = this.requestBodyParamBuilder.createValueForRequestBody(bodyParameter, swagger.getDefinitions());
 			if (value != null) {
 				request.body(value);
 			}

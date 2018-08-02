@@ -3,6 +3,7 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.buil
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import io.swagger.models.parameters.QueryParameter;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.cloud.contract.spec.internal.DslProperty;
@@ -22,12 +23,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class DslValueBuilderTest {
 
+	private DslValueBuilder dslValueBuilder;
+
+	@Before
+	public void init() {
+		dslValueBuilder = new DslValueBuilder();
+	}
+
 	@DisplayName("Dsl Value for Example value")
 	@Test
 	public void dslValueForExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setExample("anExampleValue");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile(".+"), "anExampleValue");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -37,7 +45,7 @@ public class DslValueBuilderTest {
 	public void dslValueForXExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setVendorExtension("x-example", "anXExampleValue");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile(".+"), "anXExampleValue");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -47,7 +55,7 @@ public class DslValueBuilderTest {
 	public void dslValueForDefault() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setDefault("aDefaultValue");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile(".+"), "aDefaultValue");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -57,7 +65,7 @@ public class DslValueBuilderTest {
 	public void dslValueForEnum() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setEnum(Collections.singletonList("anEnum"));
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile(".+"), "anEnum");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -67,7 +75,7 @@ public class DslValueBuilderTest {
 	public void nullForXIgnore() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setVendorExtension("x-ignore", true);
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		assertNull(actualDslProperty);
 	}
 
@@ -79,7 +87,7 @@ public class DslValueBuilderTest {
 		swaggerQueryParam.setRequired(true);
 		swaggerQueryParam.setName("ignoredButRequired");
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
-			DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+			dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		});
 		assertEquals("Set the parameter 'ignoredButRequired' to required: false to use x-ignore: true", exception.getMessage());
 	}
@@ -91,7 +99,7 @@ public class DslValueBuilderTest {
 		swaggerQueryParam.setType(STRING.type());
 		swaggerQueryParam.setName("nameOfParam");
 		swaggerQueryParam.setPattern("[A-Za-z]*");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[A-Za-z]*"), "nameOfParam");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -102,7 +110,7 @@ public class DslValueBuilderTest {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType(STRING.type());
 		swaggerQueryParam.setPattern("[A-Za-z]*");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[A-Za-z]*"), "string");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -113,7 +121,7 @@ public class DslValueBuilderTest {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType(NUMBER.type());
 		swaggerQueryParam.setPattern("[0-9]+");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+"), DEFAULT_INT);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -125,7 +133,7 @@ public class DslValueBuilderTest {
 		swaggerQueryParam.setType(NUMBER.type());
 		swaggerQueryParam.setFormat(DOUBLE.type());
 		swaggerQueryParam.setPattern("[0-9]+\\.[0-9]+");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+\\.[0-9]+"), DEFAULT_FLOAT);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -137,7 +145,7 @@ public class DslValueBuilderTest {
 		swaggerQueryParam.setType(NUMBER.type());
 		swaggerQueryParam.setFormat(FLOAT.type());
 		swaggerQueryParam.setPattern("[0-9]+\\.[0-9]+");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+\\.[0-9]+"), DEFAULT_FLOAT);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -148,7 +156,7 @@ public class DslValueBuilderTest {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType(BOOLEAN.type());
 		swaggerQueryParam.setPattern("(false|true)");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("(false|true)"), DEFAULT_BOOLEAN);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -159,7 +167,7 @@ public class DslValueBuilderTest {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType("undefined");
 		swaggerQueryParam.setPattern("(false|true)");
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("(false|true)"), 1);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
@@ -170,7 +178,7 @@ public class DslValueBuilderTest {
 	public void stringNoPatternNoExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType(STRING.type());
-		DslProperty<Object> actualDslProperty = DslValueBuilder.createDslValueForParameter(swaggerQueryParam);
+		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile(".+"), "string");
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}

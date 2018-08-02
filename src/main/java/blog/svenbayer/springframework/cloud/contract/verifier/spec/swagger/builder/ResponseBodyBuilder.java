@@ -17,10 +17,7 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
  */
 public final class ResponseBodyBuilder {
 
-	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
-
-	private ResponseBodyBuilder() {
-	}
+	private ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
 
 	/**
 	 * Creates the value for a response body and given Swagger model definitions.
@@ -29,8 +26,8 @@ public final class ResponseBodyBuilder {
 	 * @param definitions the Swagger model definitions
 	 * @return the value for the response body
 	 */
-	public static String createValueForResponseBody(Response response, Map<String, Model> definitions) {
-		if (response.getExamples() != null && response.getExamples().values().toArray()[0] != null) {
+	public String createValueForResponseBody(Response response, Map<String, Model> definitions) {
+		if (response.getExamples() != null && !response.getExamples().values().isEmpty() && response.getExamples().values().toArray()[0] != null) {
 			return String.valueOf(response.getExamples().values().toArray()[0]);
 		} else if (response.getVendorExtensions() != null && response.getVendorExtensions().get(X_EXAMPLE.field()) != null) {
 			return String.valueOf(response.getVendorExtensions().get(X_EXAMPLE.field()));
@@ -41,7 +38,7 @@ public final class ResponseBodyBuilder {
 				return String.valueOf(response.getResponseSchema().getVendorExtensions().get(X_EXAMPLE.field()));
 			} else if (response.getResponseSchema().getReference() != null) {
 				String reference = response.getResponseSchema().getReference();
-				SwaggerReferenceResolver resolver = refFactory.getReferenceResolver(reference, response.getVendorExtensions());
+				SwaggerReferenceResolver resolver = this.refFactory.getReferenceResolver(reference, response.getVendorExtensions());
 				return resolver.resolveReference(definitions);
 			} else {
 				throw new SwaggerContractConverterException("Could not parse body for response");

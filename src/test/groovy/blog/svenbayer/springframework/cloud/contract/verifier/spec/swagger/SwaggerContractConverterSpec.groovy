@@ -28,6 +28,13 @@ class SwaggerContractConverterSpec extends Specification {
             !converter.isAccepted(invalidSwagger)
     }
 
+    def "should reject null files"() {
+        given:
+            File invalidSwagger = null
+        expect:
+            !converter.isAccepted(invalidSwagger)
+    }
+
     def "should reject file that does not exist"() {
         given:
             File notExistingSwagger = new File("/aNotExistingFile")

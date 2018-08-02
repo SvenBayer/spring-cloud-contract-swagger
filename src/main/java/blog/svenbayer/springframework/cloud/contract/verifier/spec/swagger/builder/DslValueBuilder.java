@@ -16,8 +16,7 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
  */
 public final class DslValueBuilder {
 
-	private DslValueBuilder() {
-	}
+	private PatternBuilder patternBuilder = new PatternBuilder();
 
 	/**
 	 * Creates a dsl value for a query or header parameter.
@@ -25,7 +24,7 @@ public final class DslValueBuilder {
 	 * @param param the query or header parameter
 	 * @return the dsl value
 	 */
-	public static DslProperty<Object> createDslValueForParameter(AbstractSerializableParameter param) {
+	public DslProperty<Object> createDslValueForParameter(AbstractSerializableParameter param) {
 		if (param.getVendorExtensions() != null) {
 			Object ignore = param.getVendorExtensions().get("x-ignore");
 			if (ignore != null && Boolean.valueOf(ignore.toString())) {
@@ -46,7 +45,7 @@ public final class DslValueBuilder {
 		if (param.pattern != null) {
 			return new DslProperty<>(Pattern.compile(param.pattern), value);
 		} else {
-			Pattern pattern = PatternBuilder.createPatternForParameter(type, format);
+			Pattern pattern = this.patternBuilder.createPatternForParameter(type, format);
 			return new DslProperty<>(pattern, value);
 		}
 	}
@@ -57,7 +56,7 @@ public final class DslValueBuilder {
 	 * @param param the parameter
 	 * @return the example value
 	 */
-	private static Object createServerValueForParameter(AbstractSerializableParameter param) {
+	private Object createServerValueForParameter(AbstractSerializableParameter param) {
 		if (param.getExample() != null) {
 			return param.getExample();
 		}

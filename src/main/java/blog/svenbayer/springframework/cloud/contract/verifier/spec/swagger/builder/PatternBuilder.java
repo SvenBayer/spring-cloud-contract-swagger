@@ -11,9 +11,6 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
  */
 class PatternBuilder {
 
-	private PatternBuilder() {
-	}
-
 	/**
 	 * Creates a pattern for a given parameter.
 	 *
@@ -21,7 +18,7 @@ class PatternBuilder {
 	 * @param format the parameter
 	 * @return the pattern
 	 */
-	static Pattern createPatternForParameter(String type, String format) {
+	Pattern createPatternForParameter(String type, String format) {
 		String regex = createRegexForDefaultValue(type, format);
 		return Pattern.compile(regex);
 	}
@@ -33,7 +30,7 @@ class PatternBuilder {
 	 * @param format the parameter
 	 * @return the regex
 	 */
-	private static String createRegexForDefaultValue(String type, String format) {
+	private String createRegexForDefaultValue(String type, String format) {
 		if (STRING.type().equals(type)) {
 			return ".+";
 		}

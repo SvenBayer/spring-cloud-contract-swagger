@@ -26,9 +26,6 @@ public class ContractNameBuilder {
 	 */
 	private static final String PATH_CLEANUP = "(\\}\\/\\{|\\/\\{|\\}\\/|\\}|\\/)";
 
-	private ContractNameBuilder() {
-	}
-
 	/**
 	 * Creates a contract name for a given path and http method.
 	 *
@@ -37,7 +34,7 @@ public class ContractNameBuilder {
 	 * @param httpMethod the operation (GET, POST, PUT, DELETE)
 	 * @return the formatted contract name
 	 */
-	public static String createContractName(AtomicInteger priority, String pathLink, HttpMethod httpMethod) {
+	public String createContractName(AtomicInteger priority, String pathLink, HttpMethod httpMethod) {
 		Matcher pathMatcher = Pattern.compile(PATH_EXTRACT).matcher(pathLink);
 		if (!pathMatcher.find()) {
 			throw new SwaggerContractConverterException("Could not extract path of method from Swagger file: " + pathLink);

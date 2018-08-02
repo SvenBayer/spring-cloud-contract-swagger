@@ -16,10 +16,7 @@ import java.util.Map;
  */
 public final class RequestBodyParamBuilder {
 
-	private static ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
-
-	private RequestBodyParamBuilder() {
-	}
+	private ReferenceResolverFactory refFactory = new ReferenceResolverFactory();
 
 	/**
 	 * Creates the value for a request body.
@@ -28,10 +25,10 @@ public final class RequestBodyParamBuilder {
 	 * @param definitions the Swagger model definitions
 	 * @return the value for the request body
 	 */
-	public static String createValueForRequestBody(BodyParameter param, Map<String, Model> definitions) {
+	public String createValueForRequestBody(BodyParameter param, Map<String, Model> definitions) {
 		// TODO this is not verified
-		if (param.getExamples() != null && param.getExamples().entrySet().iterator().hasNext()) {
-			return String.valueOf(param.getExamples().entrySet().iterator().next());
+		if (param.getExamples() != null && !param.getExamples().values().isEmpty() && param.getExamples().values().toArray()[0] != null) {
+			return String.valueOf(param.getExamples().entrySet().iterator().next().getValue());
 		} else if (param.getVendorExtensions() != null && param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()) != null) {
 			return String.valueOf(param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()));
 		} else if (param.getSchema() != null) {
@@ -41,7 +38,7 @@ public final class RequestBodyParamBuilder {
 				return String.valueOf(param.getSchema().getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()));
 			} else if (param.getSchema().getReference() != null) {
 				String reference = param.getSchema().getReference();
-				SwaggerReferenceResolver swaggerReferenceResolver = refFactory.getReferenceResolver(reference, param.getVendorExtensions());
+				SwaggerReferenceResolver swaggerReferenceResolver = this.refFactory.getReferenceResolver(reference, param.getVendorExtensions());
 				return swaggerReferenceResolver.resolveReference(definitions);
 			}
 		}
