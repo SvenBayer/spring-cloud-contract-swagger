@@ -1,6 +1,7 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json;
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json.model.JsonKeyValuePair;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ValueNode;

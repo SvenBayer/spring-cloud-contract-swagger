@@ -43,6 +43,7 @@
     </scm>
 
     <properties>
+        <lombok.addJavaxGeneratedAnnotation>true</lombok.addJavaxGeneratedAnnotation>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
         <spring-cloud-contract.version>2.0.0.RELEASE</spring-cloud-contract.version>
         <swagger-parser.version>1.0.36</swagger-parser.version>

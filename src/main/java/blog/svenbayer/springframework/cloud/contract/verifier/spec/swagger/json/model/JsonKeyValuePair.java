@@ -1,4 +1,4 @@
-package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json;
+package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json.model;
 
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +13,7 @@ public class JsonKeyValuePair {
 	private String key;
 	private Set<JsonKeyValuePair> value;
 
-	JsonKeyValuePair(String key, Set<JsonKeyValuePair> value) {
+	public JsonKeyValuePair(String key, Set<JsonKeyValuePair> value) {
 		this.key = key;
 		this.value = value;
 	}
