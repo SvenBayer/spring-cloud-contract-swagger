@@ -50,7 +50,7 @@ public class JsonFileResolverSwagger implements SwaggerReferenceResolver {
 	 * @param externalJson the external Json
 	 * @param definitions the Swagger model definitions
 	 */
-	private void validateExternalJson(String externalJson, Map<String, Model> definitions) {
+	void validateExternalJson(String externalJson, Map<String, Model> definitions) {
 		if (definitions == null || definitions.isEmpty()) {
 			return;
 		}

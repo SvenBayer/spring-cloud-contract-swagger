@@ -166,9 +166,9 @@ public class DslValueBuilderTest {
 	public void undefinedTypeNoExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType("undefined");
-		swaggerQueryParam.setPattern("(false|true)");
+		swaggerQueryParam.setPattern("(1|2)");
 		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
-		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("(false|true)"), 1);
+		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("(1|2)"), 1);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
 

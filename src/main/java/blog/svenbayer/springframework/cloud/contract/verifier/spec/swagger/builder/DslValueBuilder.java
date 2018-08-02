@@ -41,13 +41,18 @@ public final class DslValueBuilder {
 		if (value == null) {
 			value = DefaultValues.createDefaultValueForType(type, format, name);
 		}
-		// TODO we need to check if the pattern matches
+		Pattern pattern;
 		if (param.pattern != null) {
-			return new DslProperty<>(Pattern.compile(param.pattern), value);
+			pattern = Pattern.compile(param.pattern);
 		} else {
-			Pattern pattern = this.patternBuilder.createPatternForParameter(type, format);
-			return new DslProperty<>(pattern, value);
+			pattern = this.patternBuilder.createPatternForParameter(type, format);
 		}
+		boolean isPatternMatches = pattern.matcher(String.valueOf(value)).matches();
+		if (!isPatternMatches) {
+			throw new IllegalStateException("The pattern '" + pattern.pattern() + "' does not match for the value '"
+					+ value + "' for the given param '" + param + "'");
+		}
+		return new DslProperty<>(pattern, value);
 	}
 
 	/**

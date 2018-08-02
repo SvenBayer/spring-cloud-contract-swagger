@@ -59,7 +59,7 @@ public class JsonSchemaComparing {
 	private boolean isEquals(JsonNode expectedJsonSchema, JsonNode actualJsonSchema) {
 		Set<JsonKeyValuePair> expectedJsonMap = mapNode("root", expectedJsonSchema);
 		Set<JsonKeyValuePair> actualJsonMap = mapNode("root", actualJsonSchema);
-		return expectedJsonMap.containsAll(actualJsonMap);
+		return expectedJsonMap.containsAll(actualJsonMap) && actualJsonMap.containsAll(expectedJsonMap);
 	}
 
 	/**

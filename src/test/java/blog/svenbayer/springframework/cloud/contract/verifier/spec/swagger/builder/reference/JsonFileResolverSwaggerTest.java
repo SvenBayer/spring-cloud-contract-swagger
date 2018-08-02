@@ -7,8 +7,8 @@ import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.Property;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Sven Bayer
  */
-class JsonFileResolverSwaggerTest {
+public class JsonFileResolverSwaggerTest {
 
 	@DisplayName("Should throw exception for not existing path")
 	@Test
@@ -48,7 +48,7 @@ class JsonFileResolverSwaggerTest {
 
 	@DisplayName("Should ignore comparison if no Swagger definitions available")
 	@Test
-	void ignoreComparison() throws IOException {
+	public void ignoreComparison() throws IOException {
 		String expectedJson = TestFileResourceLoader.getResourceAsString("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
 
 		SwaggerFileFolder.instance().setPathToSwaggerFile(TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/").toPath());
@@ -74,6 +74,39 @@ class JsonFileResolverSwaggerTest {
 
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			resolver.resolveReference(definitions);
+		});
+		assertThat(exception.getMessage(), startsWith("Swagger definitions and Json file should be equal but was not for:"));
+	}
+
+	@DisplayName("Ignore validations for null definitions")
+	@Test
+	public void nullDefinitions() {
+		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("CoffeeRocket.json", "#/definitions/CoffeeRocket");
+		resolver.validateExternalJson("{}", null);
+	}
+
+	@DisplayName("Ignore validations for empty definitions")
+	@Test
+	public void emptyDefinitions() {
+		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("CoffeeRocket.json", "#/definitions/CoffeeRocket");
+		resolver.validateExternalJson("{}", new HashMap<>());
+	}
+
+
+	@DisplayName("Should throw exception for not equal jsons validation")
+	@Test
+	public void notEqualJsonsValidation() {
+		JsonFileResolverSwagger resolver = new JsonFileResolverSwagger("CoffeeRocket.json", "#/definitions/CoffeeRocket");
+		HashMap<String, Model> definitions = new HashMap<>();
+		ModelImpl model = new ModelImpl();
+		HashMap<String, Property> properties = new HashMap<>();
+		properties.put("key1", new IntegerProperty());
+
+		model.setProperties(properties);
+		definitions.put("CoffeeRocket", model);
+
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			resolver.validateExternalJson("{}", definitions);
 		});
 		assertThat(exception.getMessage(), startsWith("Swagger definitions and Json file should be equal but was not for:"));
 	}

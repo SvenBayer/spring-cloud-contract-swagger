@@ -199,7 +199,6 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 				operation.getParameters().stream()
 						.filter(param -> param instanceof PathParameter)
 						.map(AbstractSerializableParameter.class::cast)
-						//TODO This has to become more advanced! We need to check types so we can use 1 for int32 etc.
 						.forEach(param -> request.urlPath(request.getUrlPath().getClientValue().toString().replace("{" + param.getName() + "}", param.getName())));
 				final QueryParameters queryParameters = new QueryParameters();
 				request.getUrlPath().setQueryParameters(queryParameters);

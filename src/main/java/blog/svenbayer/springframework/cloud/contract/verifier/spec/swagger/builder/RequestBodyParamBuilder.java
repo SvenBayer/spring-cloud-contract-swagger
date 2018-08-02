@@ -26,7 +26,6 @@ public final class RequestBodyParamBuilder {
 	 * @return the value for the request body
 	 */
 	public String createValueForRequestBody(BodyParameter param, Map<String, Model> definitions) {
-		// TODO this is not verified
 		if (param.getExamples() != null && !param.getExamples().values().isEmpty() && param.getExamples().values().toArray()[0] != null) {
 			return String.valueOf(param.getExamples().entrySet().iterator().next().getValue());
 		} else if (param.getVendorExtensions() != null && param.getVendorExtensions().get(SwaggerFields.X_EXAMPLE.field()) != null) {
