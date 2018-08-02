@@ -2,6 +2,7 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.json
 
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.TestFileResourceLoader;
 import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.reference.SwaggerDefinitionsRefResolverSwagger;
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.exception.SwaggerContractConverterException;
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -14,8 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Sven Bayer
@@ -104,5 +104,49 @@ public class JsonSchemaComparingTest {
 		String actualJson = new String(Files.readAllBytes(jsonFile.toPath()));
 
 		assertFalse(jsonSchemaComparing.isEquals(expectedJson, actualJson), "Swagger definitions with more fields than Json file should be false!");
+	}
+
+	@DisplayName("Should throw exception for expectedJson null")
+	@Test
+	public void expectedJsonNull() throws IOException {
+		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
+		String json = new String(Files.readAllBytes(jsonFile.toPath()));
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			jsonSchemaComparing.isEquals(null, json);
+		});
+		assertEquals("JSON of Swagger definitions must not be null!", exception.getMessage());
+	}
+
+	@DisplayName("Should throw exception for actualJson null")
+	@Test
+	public void actualJsonNull() throws IOException {
+		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
+		String json = new String(Files.readAllBytes(jsonFile.toPath()));
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			jsonSchemaComparing.isEquals(json, null);
+		});
+		assertEquals("JSON file must not be null!", exception.getMessage());
+	}
+
+	@DisplayName("Should throw exception for expected invalid JSON")
+	@Test
+	public void expectedInvalidJson() throws IOException {
+		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
+		String json = new String(Files.readAllBytes(jsonFile.toPath()));
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			jsonSchemaComparing.isEquals("{ invalid: bla [", json);
+		});
+		assertEquals("Could not parse JSON of Swagger definitions!", exception.getMessage());
+	}
+
+	@DisplayName("Should throw exception for actual invalid JSON")
+	@Test
+	public void actualInvalidJson() throws IOException {
+		File jsonFile= TestFileResourceLoader.getResourceAsFile("swagger/jsonFileResolver/withEqualFields/CoffeeRocket.json");
+		String json = new String(Files.readAllBytes(jsonFile.toPath()));
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			jsonSchemaComparing.isEquals(json, "{ invalid: bla [");
+		});
+		assertEquals("Could not parse JSON of file!", exception.getMessage());
 	}
 }

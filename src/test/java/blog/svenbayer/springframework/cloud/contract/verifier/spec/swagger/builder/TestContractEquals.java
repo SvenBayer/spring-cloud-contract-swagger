@@ -143,7 +143,7 @@ public class TestContractEquals {
 		assertAll("query parameters", queryParameterExecutables.stream());
 	}
 
-	private static void assertDslPropertyEquals(DslProperty expected, DslProperty actual, String msg) {
+	static void assertDslPropertyEquals(DslProperty expected, DslProperty actual, String msg) {
 		if (assertBothOrNonNull(expected, actual, msg)) {
 			return;
 		}

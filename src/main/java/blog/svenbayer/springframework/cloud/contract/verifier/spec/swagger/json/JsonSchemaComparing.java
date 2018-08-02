@@ -30,6 +30,12 @@ public class JsonSchemaComparing {
 	public boolean isEquals(String expectedJson, String actualJson) {
 		JsonNode expectedNode;
 		JsonNode actualNode;
+		if (expectedJson == null) {
+			throw new SwaggerContractConverterException("JSON of Swagger definitions must not be null!");
+		}
+		if (actualJson == null) {
+			throw new SwaggerContractConverterException("JSON file must not be null!");
+		}
 		try {
 			expectedNode = this.mapper.readTree(expectedJson);
 		} catch (IOException e) {

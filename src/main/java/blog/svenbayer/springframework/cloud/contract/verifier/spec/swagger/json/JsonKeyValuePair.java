@@ -37,12 +37,4 @@ public class JsonKeyValuePair {
 		}
 		return Objects.hashCode(this.key) + valueHashCode;
 	}
-
-	@Override
-	public String toString() {
-		return "JsonKeyValuePair{" +
-				"key='" + this.key + '\'' +
-				", value=" + this.value +
-				'}';
-	}
 }
