@@ -39,12 +39,12 @@ public class JsonSchemaComparing {
 		try {
 			expectedNode = this.mapper.readTree(expectedJson);
 		} catch (IOException e) {
-			throw new SwaggerContractConverterException("Could not parse JSON of Swagger definitions!");
+			throw new SwaggerContractConverterException("Could not parse JSON of Swagger definitions!", e);
 		}
 		try {
 			actualNode = this.mapper.readTree(actualJson);
 		} catch (IOException e) {
-			throw new SwaggerContractConverterException("Could not parse JSON of file!");
+			throw new SwaggerContractConverterException("Could not parse JSON of file!", e);
 		}
 		return isEquals(expectedNode, actualNode);
 	}

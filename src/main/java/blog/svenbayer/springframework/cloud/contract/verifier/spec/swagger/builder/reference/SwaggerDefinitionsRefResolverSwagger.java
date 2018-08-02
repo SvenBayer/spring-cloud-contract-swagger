@@ -72,6 +72,9 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 	 */
 	private Map<String, Object> resolveDefinitionsRef(String reference, Map<String, Model> definitions) {
 		String referenceName = reference.substring(reference.lastIndexOf('/') + 1);
+		if (definitions == null || definitions.get(referenceName) == null || definitions.get(referenceName).getProperties() == null) {
+			throw new SwaggerContractConverterException("Could not resolve reference '" + reference + "'");
+		}
 		return definitions.get(referenceName).getProperties().entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, entry -> ResponseHeaderValueBuilder.createResponseHeaderValue(entry.getKey(), entry.getValue(), definitions)));
 	}

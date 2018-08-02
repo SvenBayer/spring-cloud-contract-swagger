@@ -114,13 +114,6 @@ public final class ResponseHeaderValueBuilder {
 				numericPropertyValue = numeric.getMaximum();
 			}
 		}
-		if (numeric instanceof DoubleProperty || numeric instanceof FloatProperty) {
-			if (numericPropertyValue != null) {
-				return numericPropertyValue.doubleValue();
-			} else {
-				return DEFAULT_FLOAT;
-			}
-		}
 		return getTypedNumericValue(numeric, numericPropertyValue);
 	}
 
@@ -131,22 +124,24 @@ public final class ResponseHeaderValueBuilder {
 	 * @param numericPropertyValue the value
 	 * @return the typed value
 	 */
-	private static Object getTypedNumericValue(AbstractNumericProperty numeric, BigDecimal numericPropertyValue) {
-		if (numeric instanceof LongProperty || numeric instanceof DecimalProperty
-				|| numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
-			if (numericPropertyValue != null) {
-				if (numeric instanceof LongProperty) {
-					return numericPropertyValue.longValue();
-				} else if (numeric instanceof DecimalProperty) {
-					return numericPropertyValue;
-				} else if (numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
-					return numericPropertyValue.intValue();
-				} else {
-					return DEFAULT_INT;
-				}
-			} else {
-				return DEFAULT_INT;
-			}
+	static Object getTypedNumericValue(AbstractNumericProperty numeric, BigDecimal numericPropertyValue) {
+		if (numericPropertyValue == null) {
+			return createDefaultValueForType(numeric.getType(), numeric.getFormat(), numeric.getName());
+		}
+		if (numeric instanceof LongProperty) {
+			return numericPropertyValue.longValue();
+		}
+		if (numeric instanceof IntegerProperty || numeric instanceof BaseIntegerProperty) {
+			return numericPropertyValue.intValue();
+		}
+		if (numeric instanceof DoubleProperty) {
+			return numericPropertyValue.doubleValue();
+		}
+		if (numeric instanceof FloatProperty) {
+			return numericPropertyValue.floatValue();
+		}
+		if (numeric instanceof DecimalProperty) {
+			return numericPropertyValue;
 		}
 		return DEFAULT_INT;
 	}
@@ -174,7 +169,7 @@ public final class ResponseHeaderValueBuilder {
 	 * @param property the property
 	 * @return the specified typed property or null if not matching subclass is found
 	 */
-	private static Object getDefaultValue(Property property) {
+	static Object getDefaultValue(Property property) {
 		if (property instanceof DoubleProperty) {
 			return DoubleProperty.class.cast(property).getDefault();
 		}

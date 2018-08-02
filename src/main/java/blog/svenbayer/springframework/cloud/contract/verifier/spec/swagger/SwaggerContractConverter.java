@@ -44,7 +44,7 @@ public final class SwaggerContractConverter implements ContractConverter<Swagger
 		try {
 			Swagger swagger = new SwaggerParser().read(file.getPath());
 			return swagger != null;
-		} catch (Exception e) {
+		} catch (Exception ignore) {
 			return false;
 		}
 	}

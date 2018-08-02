@@ -28,6 +28,13 @@ class SwaggerContractConverterSpec extends Specification {
             !converter.isAccepted(invalidSwagger)
     }
 
+    def "should reject file that does not exist"() {
+        given:
+            File notExistingSwagger = new File("/aNotExistingFile")
+        expect:
+            !converter.isAccepted(notExistingSwagger)
+    }
+
     def "should retrieve empty contract when converting from swagger"() {
         given:
             List<Contract> springCloudContracts = new ArrayList<>()

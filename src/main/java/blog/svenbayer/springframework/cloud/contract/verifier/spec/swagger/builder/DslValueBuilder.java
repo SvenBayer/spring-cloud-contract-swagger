@@ -8,7 +8,6 @@ import org.springframework.cloud.contract.spec.internal.DslProperty;
 import java.util.regex.Pattern;
 
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFields.X_EXAMPLE;
-import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.*;
 
 /**
  * Creates values for query and header parameters.
@@ -37,15 +36,16 @@ public final class DslValueBuilder {
 			}
 		}
 		Object value = createServerValueForParameter(param);
+		String type = param.getType();
+		String format = param.getFormat();
+		String name = param.getName();
 		if (value == null) {
-			value = createDefaultValueForType(param);
+			value = DefaultValues.createDefaultValueForType(type, format, name);
 		}
 		// TODO we need to check if the pattern matches
 		if (param.pattern != null) {
 			return new DslProperty<>(Pattern.compile(param.pattern), value);
 		} else {
-			String type = param.getType();
-			String format = param.getFormat();
 			Pattern pattern = PatternBuilder.createPatternForParameter(type, format);
 			return new DslProperty<>(pattern, value);
 		}
@@ -71,34 +71,5 @@ public final class DslValueBuilder {
 			return param.getEnum().get(0);
 		}
 		return null;
-	}
-
-	/**
-	 * Creates a default value for a given parameter.
-	 *
-	 * @param param the parameter
-	 * @return the default value
-	 */
-	private static Object createDefaultValueForType(AbstractSerializableParameter param) {
-		String type = param.getType();
-		String format = param.getFormat();
-
-		if (STRING.type().equals(type)) {
-			if (param.getName() != null && !param.getName().isEmpty()) {
-				return param.getName();
-			} else {
-				return STRING.type();
-			}
-		}
-		if ((NUMBER.type().equals(type)) && (DOUBLE.type().equals(format) || FLOAT.type().equals(format))) {
-			return DefaultValues.DEFAULT_FLOAT;
-		}
-		if (NUMBER.type().equals(type)) {
-			return DefaultValues.DEFAULT_INT;
-		}
-		if (BOOLEAN.type().equals(type)) {
-			return DefaultValues.DEFAULT_BOOLEAN;
-		}
-		return DefaultValues.DEFAULT_INT;
 	}
 }
