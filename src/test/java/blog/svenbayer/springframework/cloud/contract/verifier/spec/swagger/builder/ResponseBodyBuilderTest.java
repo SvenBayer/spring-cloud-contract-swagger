@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -51,5 +52,32 @@ public class ResponseBodyBuilderTest {
 		response.setExamples(examples);
 		String actualValue = builder.createValueForResponseBody(response, new HashMap<>());
 		assertEquals("value", actualValue);
+	}
+
+	@DisplayName("Response with no proper example data set")
+	@Test
+	public void noProperExampleDataSet() {
+		Response response = new Response();
+		response.setExamples(new HashMap<>());
+		response.setVendorExtensions(new HashMap<>());
+		response.setResponseSchema(new ModelImpl());
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			builder.createValueForResponseBody(response, new HashMap<>());
+		});
+		assertEquals("Could not parse body for response", exception.getMessage());
+	}
+
+	@DisplayName("Schema with no x-example data set")
+	@Test
+	public void schemaNoProperXExampleDataSet() {
+		Response response = new Response();
+		ModelImpl model = new ModelImpl();
+		model.setVendorExtensions(new HashMap<>());
+		model.setEnum(new ArrayList<>());
+		response.setResponseSchema(model);
+		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
+			builder.createValueForResponseBody(response, new HashMap<>());
+		});
+		assertEquals("Could not parse body for response", exception.getMessage());
 	}
 }
