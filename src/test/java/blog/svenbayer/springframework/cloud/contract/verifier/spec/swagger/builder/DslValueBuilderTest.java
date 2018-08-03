@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder.TestContractEquals.assertDslPropertyEquals;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.*;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.DOUBLE;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.FLOAT;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -119,7 +121,7 @@ public class DslValueBuilderTest {
 	@Test
 	public void numberNoExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
-		swaggerQueryParam.setType(NUMBER.type());
+		swaggerQueryParam.setType(INTEGER.type());
 		swaggerQueryParam.setPattern("[0-9]+");
 		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
 		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+"), DEFAULT_INT);
@@ -131,10 +133,10 @@ public class DslValueBuilderTest {
 	public void numberDoubleNoExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType(NUMBER.type());
-		swaggerQueryParam.setFormat(DOUBLE.type());
+		swaggerQueryParam.setFormat(DOUBLE.format());
 		swaggerQueryParam.setPattern("[0-9]+\\.[0-9]+");
 		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
-		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+\\.[0-9]+"), DEFAULT_FLOAT);
+		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+\\.[0-9]+"), DEFAULT_DOUBLE);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
 
@@ -143,10 +145,10 @@ public class DslValueBuilderTest {
 	public void numberFloatNoExample() {
 		QueryParameter swaggerQueryParam = new QueryParameter();
 		swaggerQueryParam.setType(NUMBER.type());
-		swaggerQueryParam.setFormat(FLOAT.type());
+		swaggerQueryParam.setFormat(FLOAT.format());
 		swaggerQueryParam.setPattern("[0-9]+\\.[0-9]+");
 		DslProperty<Object> actualDslProperty = dslValueBuilder.createDslValueForParameter(swaggerQueryParam);
-		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+\\.[0-9]+"), DEFAULT_FLOAT);
+		DslProperty<Object> expectedDslProperty = new DslProperty<>(Pattern.compile("[0-9]+\\.[0-9]+"), DEFAULT_DOUBLE);
 		assertDslPropertyEquals(expectedDslProperty, actualDslProperty, "DslProperty was not equals!");
 	}
 

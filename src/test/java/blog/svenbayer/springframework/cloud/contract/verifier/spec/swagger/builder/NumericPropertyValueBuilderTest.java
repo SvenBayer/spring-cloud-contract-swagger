@@ -22,7 +22,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void typedNumericForLong() {
 		LongProperty property = new LongProperty();
-		BigDecimal value = new BigDecimal(5);
+		BigDecimal value = BigDecimal.valueOf(5);
 		Object actualValue = builder.getTypedNumericValue(property, value);
 		assertEquals(5L, actualValue);
 	}
@@ -31,7 +31,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void typedNumericForInteger() {
 		IntegerProperty property = new IntegerProperty();
-		BigDecimal value = new BigDecimal(8);
+		BigDecimal value = BigDecimal.valueOf(8);
 		Object actualValue = builder.getTypedNumericValue(property, value);
 		assertEquals(8, actualValue);
 	}
@@ -40,7 +40,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void typedNumericForBaseInteger() {
 		BaseIntegerProperty property = new BaseIntegerProperty();
-		BigDecimal value = new BigDecimal(9);
+		BigDecimal value = BigDecimal.valueOf(9);
 		Object actualValue = builder.getTypedNumericValue(property, value);
 		assertEquals(9, actualValue);
 	}
@@ -49,7 +49,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void typedNumericForDouble() {
 		DoubleProperty property = new DoubleProperty();
-		BigDecimal value = new BigDecimal(3.21d);
+		BigDecimal value = BigDecimal.valueOf(3.21d);
 		Object actualValue = builder.getTypedNumericValue(property, value);
 		assertEquals(3.21d, actualValue);
 	}
@@ -58,7 +58,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void typedNumericForFloat() {
 		FloatProperty property = new FloatProperty();
-		BigDecimal value = new BigDecimal(2.67f);
+		BigDecimal value = BigDecimal.valueOf(2.67f);
 		Object actualValue = builder.getTypedNumericValue(property, value);
 		assertEquals(2.67f, actualValue);
 	}
@@ -67,15 +67,15 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void typedNumericForDecimal() {
 		DecimalProperty property = new DecimalProperty();
-		BigDecimal value = new BigDecimal(4);
+		BigDecimal value = BigDecimal.valueOf(4);
 		Object actualValue = builder.getTypedNumericValue(property, value);
-		assertEquals(new BigDecimal(4), actualValue);
+		assertEquals(BigDecimal.valueOf(4), actualValue);
 	}
 
 	@DisplayName("Typed numeric value for no default value")
 	@Test
 	public void typedNumericForNoDefaultValue() {
-		DecimalProperty property = new DecimalProperty();
+		IntegerProperty property = new IntegerProperty();
 		Object actualValue = builder.getTypedNumericValue(property, null);
 		assertEquals(1, actualValue);
 	}
@@ -84,7 +84,7 @@ public class NumericPropertyValueBuilderTest {
 	@Test
 	public void unknownPropertyType() {
 		AbstractNumericProperty property = new AbstractNumericProperty() {};
-		Object actualValue = builder.getTypedNumericValue(property, new BigDecimal(1));
+		Object actualValue = builder.getTypedNumericValue(property, BigDecimal.valueOf(1));
 		assertEquals(1, actualValue);
 	}
 }

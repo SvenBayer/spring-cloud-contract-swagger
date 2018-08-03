@@ -2,6 +2,8 @@ package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.buil
 
 import java.util.regex.Pattern;
 
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.DOUBLE;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.FLOAT;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.*;
 
 /**
@@ -34,10 +36,10 @@ class PatternBuilder {
 		if (STRING.type().equals(type)) {
 			return ".+";
 		}
-		if ((NUMBER.type().equals(type)) && (DOUBLE.type().equals(format) || FLOAT.type().equals(format))) {
+		if ((NUMBER.type().equals(type)) && (DOUBLE.format().equals(format) || FLOAT.format().equals(format))) {
 			return "[0-9]+\\.[0-9]+";
 		}
-		if (NUMBER.type().equals(type)) {
+		if (INTEGER.type().equals(type)) {
 			return "[0-9]+";
 		}
 		if (BOOLEAN.type().equals(type)) {

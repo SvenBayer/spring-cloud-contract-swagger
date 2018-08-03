@@ -1,11 +1,11 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues;
 import io.swagger.models.properties.*;
 
 import java.math.BigDecimal;
 
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_INT;
-import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.createDefaultValueForType;
 
 /**
  * Creates default values for {@link AbstractNumericProperty}.
@@ -13,6 +13,8 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
  * @author Sven Bayer
  */
 public class NumericPropertyValueBuilder {
+
+	private DefaultValues defaultValues = new DefaultValues();
 
 	/**
 	 * Creates a default numeric value for the given property
@@ -48,7 +50,7 @@ public class NumericPropertyValueBuilder {
 	 */
 	Object getTypedNumericValue(AbstractNumericProperty numeric, BigDecimal numericPropertyValue) {
 		if (numericPropertyValue == null) {
-			return createDefaultValueForType(numeric.getType(), numeric.getFormat(), numeric.getName());
+			return this.defaultValues.createDefaultValueForType(numeric.getType(), numeric.getFormat(), numeric.getName(), numeric.getMinimum(), numeric.getMaximum());
 		}
 		if (numeric instanceof LongProperty) {
 			return numericPropertyValue.longValue();

@@ -13,8 +13,8 @@ import java.util.Map;
 
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_BOOLEAN;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.DefaultValues.DEFAULT_INT;
-import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.INT_32;
-import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.INT_64;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.INT_32;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.INT_64;
 
 /**
  * Creates a value for a response header.
@@ -61,13 +61,13 @@ public final class ResponseHeaderValueBuilder {
 			return defaultValue;
 		}
 		if (property instanceof RefProperty) {
-			RefProperty refProperty = RefProperty.class.cast(property);
+			RefProperty refProperty = (RefProperty) property;
 			String ref = refProperty.get$ref();
 			SwaggerReferenceResolver resolver = this.refFactory.getReferenceResolver(ref, refProperty.getVendorExtensions());
 			return resolver.resolveReference(definitions);
 		}
 		if (property instanceof ArrayProperty) {
-			ArrayProperty arrayProperty = ArrayProperty.class.cast(property);
+			ArrayProperty arrayProperty = (ArrayProperty) property;
 			if (arrayProperty.getItems() == null) {
 				return new ArrayList<>(Collections.singleton(DEFAULT_INT));
 			} else {
@@ -81,7 +81,7 @@ public final class ResponseHeaderValueBuilder {
 			return DEFAULT_BOOLEAN;
 		}
 		if (property instanceof StringProperty) {
-			StringProperty stringProperty = StringProperty.class.cast(property);
+			StringProperty stringProperty = (StringProperty) property;
 			if (stringProperty.getEnum() != null) {
 				return stringProperty.getEnum().get(0);
 			}
@@ -100,8 +100,8 @@ public final class ResponseHeaderValueBuilder {
 		if (property.getFormat() == null) {
 			return value;
 		}
-		if (value instanceof Double && (property.getFormat().equals(INT_32.type()) || property.getFormat().equals(INT_64.type()))) {
-			return Double.class.cast(value).intValue();
+		if (value instanceof Double && (property.getFormat().equals(INT_32.format()) || property.getFormat().equals(INT_64.format()))) {
+			return ((Double) value).intValue();
 		}
 		return value;
 	}
@@ -114,22 +114,22 @@ public final class ResponseHeaderValueBuilder {
 	 */
 	Object getDefaultValue(Property property) {
 		if (property instanceof DoubleProperty) {
-			return DoubleProperty.class.cast(property).getDefault();
+			return ((DoubleProperty) property).getDefault();
 		}
 		if (property instanceof FloatProperty) {
-			return FloatProperty.class.cast(property).getDefault();
+			return ((FloatProperty) property).getDefault();
 		}
 		if (property instanceof LongProperty) {
-			return LongProperty.class.cast(property).getDefault();
+			return ((LongProperty) property).getDefault();
 		}
 		if (property instanceof IntegerProperty) {
-			return IntegerProperty.class.cast(property).getDefault();
+			return ((IntegerProperty) property).getDefault();
 		}
 		if (property instanceof BooleanProperty) {
-			return BooleanProperty.class.cast(property).getDefault();
+			return ((BooleanProperty) property).getDefault();
 		}
 		if (property instanceof StringProperty) {
-			return StringProperty.class.cast(property).getDefault();
+			return ((StringProperty) property).getDefault();
 		}
 		return null;
 	}

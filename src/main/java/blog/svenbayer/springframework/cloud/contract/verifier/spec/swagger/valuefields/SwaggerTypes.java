@@ -9,15 +9,12 @@ public enum SwaggerTypes {
 	STRING("string"),
 	NUMBER("number"),
 	BOOLEAN("boolean"),
-	DOUBLE("double"),
-	FLOAT("float"),
-	INT_32("int32"),
-	INT_64("int64");
+	INTEGER("integer");
 
-	private String swaggerType;
+	private String type;
 
-	SwaggerTypes(String type) {
-		this.swaggerType = type;
+	SwaggerTypes(String swaggerType) {
+		this.type = swaggerType;
 	}
 
 	/**
@@ -26,6 +23,6 @@ public enum SwaggerTypes {
 	 * @return the Swagger type
 	 */
 	public String type() {
-		return this.swaggerType;
+		return this.type;
 	}
 }

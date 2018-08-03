@@ -17,6 +17,7 @@ import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagge
 public final class DslValueBuilder {
 
 	private PatternBuilder patternBuilder = new PatternBuilder();
+	private DefaultValues defaultValues = new DefaultValues();
 
 	/**
 	 * Creates a dsl value for a query or header parameter.
@@ -39,7 +40,7 @@ public final class DslValueBuilder {
 		String format = param.getFormat();
 		String name = param.getName();
 		if (value == null) {
-			value = DefaultValues.createDefaultValueForType(type, format, name);
+			value = this.defaultValues.createDefaultValueForType(type, format, name, param.getMinimum(), param.getMaximum());
 		}
 		Pattern pattern;
 		if (param.pattern != null) {

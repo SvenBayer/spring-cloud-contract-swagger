@@ -75,7 +75,7 @@ definitions:
       name:
         type: string
       age:
-        type: number
+        type: integer
       address:
         type: string
     title: Beanonaut

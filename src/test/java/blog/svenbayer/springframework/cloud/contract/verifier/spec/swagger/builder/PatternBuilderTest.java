@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 
 import java.util.regex.Pattern;
 
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.DOUBLE;
+import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerFormats.FLOAT;
 import static blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.valuefields.SwaggerTypes.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,14 +33,14 @@ public class PatternBuilderTest {
 	@DisplayName("Double matches pattern")
 	@Test
 	public void numberDoubleMatchesPattern() {
-		Pattern pattern = patternBuilder.createPatternForParameter(NUMBER.type(), DOUBLE.type());
+		Pattern pattern = patternBuilder.createPatternForParameter(NUMBER.type(), DOUBLE.format());
 		assertTrue(pattern.matcher("1.1").matches());
 	}
 
 	@DisplayName("Float matches pattern")
 	@Test
 	public void numberFloatMatchesPattern() {
-		Pattern pattern = patternBuilder.createPatternForParameter(NUMBER.type(), FLOAT.type());
+		Pattern pattern = patternBuilder.createPatternForParameter(NUMBER.type(), FLOAT.format());
 		assertTrue(pattern.matcher("1.1").matches());
 	}
 

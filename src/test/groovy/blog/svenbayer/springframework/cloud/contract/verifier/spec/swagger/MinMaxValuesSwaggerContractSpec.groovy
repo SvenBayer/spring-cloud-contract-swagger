@@ -29,8 +29,8 @@ class MinMaxValuesSwaggerContractSpec extends Specification {
                 method(POST())
                 urlPath("/coffee-rocket-service/v1.0/takeoff") {
                     queryParameters {
-                        parameter("withWormhole", new DslProperty(Pattern.compile("(true|false)"), true))
-                        parameter("viaHyperLoop", new DslProperty(Pattern.compile("(true|false)"), true))
+                        parameter("withWormhole", new DslProperty(Pattern.compile("[0-9]+\\.[0-9]+"), 8.2d))
+                        parameter("viaHyperLoop", new DslProperty(Pattern.compile("[0-9]+\\.[0-9]+"), 12.1f))
                     }
                 }
                 headers {

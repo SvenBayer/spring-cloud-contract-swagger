@@ -78,7 +78,7 @@ definitions:
       name:
         type: string
       age:
-        type: number
+        type: integer
     title: Beanonaut
   BeanItinerary:
     type: object
@@ -118,7 +118,7 @@ definitions:
       name:
         type: string
       size:
-        type: number
+        type: integer
       asteroids:
         type: array
         items:
@@ -130,7 +130,7 @@ definitions:
       name:
         type: string
       speed:
-        type: number
+        type: integer
       istransparent:
         type: boolean
       aliens:

@@ -101,7 +101,7 @@ definitions:
       name:
         type: string
       age:
-        type: number
+        type: integer
     title: Beanonaut
   BeanItinerary:
     type: object

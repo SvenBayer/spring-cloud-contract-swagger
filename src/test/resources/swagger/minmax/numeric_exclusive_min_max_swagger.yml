@@ -39,12 +39,16 @@ paths:
           name: withWormhole
           description: withWormhole
           required: true
-          type: boolean
+          type: number
+          format: double
+          maximum: 8.2
         - in: query
           name: viaHyperLoop
           description: viaHyperLoop
           required: true
-          type: boolean
+          type: number
+          format: float
+          minimum: 12.1
         - name: X-Request-ID
           in: header
           description: X-Request-ID
@@ -91,7 +95,7 @@ definitions:
       name:
         type: string
       age:
-        type: number
+        type: integer
     title: Beanonaut
   BeanItinerary:
     type: object
@@ -129,7 +133,7 @@ definitions:
       name:
         type: string
       size:
-        type: number
+        type: integer
       asteroids:
         type: array
         items:
@@ -141,7 +145,7 @@ definitions:
       name:
         type: string
       speed:
-        type: number
+        type: integer
       istransparent:
         type: boolean
       aliens:

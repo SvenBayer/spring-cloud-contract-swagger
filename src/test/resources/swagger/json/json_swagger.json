@@ -102,7 +102,7 @@
           "type": "string"
         },
         "age": {
-          "type": "number"
+          "type": "integer"
         }
       },
       "title": "Beanonaut"
@@ -158,7 +158,7 @@
           "type": "string"
         },
         "size": {
-          "type": "number"
+          "type": "integer"
         },
         "asteroids": {
           "type": "array",
@@ -176,7 +176,7 @@
           "type": "string"
         },
         "speed": {
-          "type": "number"
+          "type": "integer"
         },
         "istransparent": {
           "type": "boolean"

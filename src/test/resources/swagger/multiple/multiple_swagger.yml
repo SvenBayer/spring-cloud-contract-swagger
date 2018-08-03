@@ -169,11 +169,11 @@ paths:
         - name: numAsteroids
           in: query
           required: true
-          type: number
+          type: integer
         - name: minSize
           in: query
           required: true
-          type: number
+          type: integer
         - name: X-Request-ID
           in: header
           description: X-Request-ID
@@ -335,9 +335,9 @@ definitions:
     type: object
     properties:
       x:
-        type: number
+        type: integer
       y:
-        type: number
+        type: integer
     title: BeanSpaceLocation
   Beanonaut:
     type: object
@@ -345,7 +345,7 @@ definitions:
       name:
         type: string
       age:
-        type: number
+        type: integer
     title: Beanonaut
   BeanItinerary:
     type: object
@@ -379,7 +379,7 @@ definitions:
       name:
         type: string
       size:
-        type: number
+        type: integer
       asteroids:
         type: array
         items:
@@ -391,7 +391,7 @@ definitions:
       name:
         type: string
       speed:
-        type: number
+        type: integer
       shape:
         type: string
         enum:
