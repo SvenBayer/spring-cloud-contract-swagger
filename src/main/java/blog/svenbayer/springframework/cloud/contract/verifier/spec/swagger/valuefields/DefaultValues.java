@@ -63,6 +63,10 @@ public final class DefaultValues {
 		if (intValue != null) {
 			return intValue;
 		}
+		Object longValue = getLongValue(type, format, min, max);
+		if (longValue != null) {
+			return longValue;
+		}
 		if (BOOLEAN.type().equals(type)) {
 			return DEFAULT_BOOLEAN;
 		}
@@ -70,16 +74,21 @@ public final class DefaultValues {
 	}
 
 	private Object getIntValue(String type, String format, BigDecimal min, BigDecimal max) {
+		if (INTEGER.type().equals(type) && INT_64.format().equals(format)) {
+			if (min != null) {
+				return min.longValue();
+			}
+			if (max != null) {
+				return max.longValue();
+			}
+			return DEFAULT_LONG;
+		}
+		return null;
+	}
+
+	private Object getLongValue(String type, String format, BigDecimal min, BigDecimal max) {
 		if (INTEGER.type().equals(type)) {
-			if (INT_64.format().equals(format)) {
-				if (min != null) {
-					return min.longValue();
-				}
-				if (max != null) {
-					return max.longValue();
-				}
-				return DEFAULT_LONG;
-			} else {
+			if (INT_32.format().equals(format) || format == null) {
 				if (min != null) {
 					return min.intValue();
 				}
