@@ -87,7 +87,7 @@ public final class DefaultValues {
 	}
 
 	private Object getLongValue(String type, String format, BigDecimal min, BigDecimal max) {
-		if (INTEGER.type().equals(type) && INT_32.format().equals(format) || format == null) {
+		if (INTEGER.type().equals(type) && (INT_32.format().equals(format) || format == null)) {
 			if (min != null) {
 				return min.intValue();
 			}
