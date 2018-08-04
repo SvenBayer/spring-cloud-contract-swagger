@@ -41,6 +41,9 @@ To set your own default values, you can use the **x-example** field in the **par
 ### Optional Parameters
 If you do not want to pass an optional parameter (required: false) in a request, you can add **x-ignore: true** to this field. 
 
+### Patterns
+Pattern only work for request parameters. Your provided example values will be checked against the pattern.
+
 ### Custom JSON Body
 You can set the request and response body with a json string. For this, you have to place an **x-example** field next (on the same level) to the **schema** field. Use single ticks for your json string so you do not have to escape any quotes.
 
