@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TestContractEquals {
 
+	private static final String LINE_SEPS = "\\r\\n|\\n|\\r";
+
 	public static void assertContractEquals(Collection<Contract> expected, Collection<Contract> actual) {
 		final String msg = "Contract List:\n";
 		if (assertBothOrNonNull(expected, actual, msg)) {
@@ -31,9 +33,7 @@ public class TestContractEquals {
 			final Contract expectedNext = expectedIterator.next();
 			final Contract actualNext = actualIterator.next();
 			final String contractMsg = msg + "Contract List Index: " + index.getAndIncrement() + "\n";
-			contractExecutables.add(() -> {
-				assertContractEquals(expectedNext, actualNext, contractMsg);
-			});
+			contractExecutables.add(() -> assertContractEquals(expectedNext, actualNext, contractMsg));
 		}
 
 		assertAll("contract list", contractExecutables.stream());
@@ -193,16 +193,16 @@ public class TestContractEquals {
 		if (expected instanceof Pattern) {
 			msg = msg + "Pattern:\n";
 			assertEquals(Pattern.class, actual.getClass(), msg);
-			Pattern expectedPattern = Pattern.class.cast(expected);
-			Pattern actualPattern = Pattern.class.cast(actual);
+			Pattern expectedPattern = (Pattern) expected;
+			Pattern actualPattern = (Pattern) actual;
 			assertEquals(expectedPattern.pattern(), actualPattern.pattern(), msg);
 		} else if (expected instanceof DslProperty) {
 			msg = msg + "DslProperty:\n";
-			DslProperty expectedDslProperty = DslProperty.class.cast(expected);
-			DslProperty actualDslProperty = DslProperty.class.cast(actual);
+			DslProperty expectedDslProperty = (DslProperty) expected;
+			DslProperty actualDslProperty = (DslProperty) actual;
 			assertDslPropertyEquals(expectedDslProperty, actualDslProperty, msg);
 		} else {
-			assertEquals(expected, actual, msg);
+			assertEqualsNoLineSeparator(expected, actual, msg);
 		}
 	}
 
@@ -213,6 +213,17 @@ public class TestContractEquals {
 		} else {
 			assertNotNull(actual, msg);
 			return false;
+		}
+	}
+
+	private static void assertEqualsNoLineSeparator(Object expected, Object actual, String msg) {
+		if (expected == null) {
+			assertNull(actual, msg);
+		} else {
+			assertNotNull(actual, msg);
+			String cleanedUpExpected = expected.toString().replaceAll(LINE_SEPS, System.lineSeparator());
+			String cleanedUpActual = actual.toString().replaceAll(LINE_SEPS, System.lineSeparator());
+			assertEquals(cleanedUpExpected, cleanedUpActual, msg);
 		}
 	}
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import io.swagger.models.Model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,12 +16,14 @@ import java.util.stream.Collectors;
  */
 public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceResolver {
 
-	private static final Map<String, String> REPLACEMENTS = new HashMap<>();
+	private static final Map<String, String> REPLACEMENTS = new LinkedHashMap<>();
 
 	private ResponseHeaderValueBuilder responseHeaderValueBuilder = new ResponseHeaderValueBuilder();
 
 	static {
+		REPLACEMENTS.put("\\\\r\\\\n", System.lineSeparator());
 		REPLACEMENTS.put("\\\\n", "\n");
+		REPLACEMENTS.put("\\\\r", "\r");
 		REPLACEMENTS.put("\\\\\"", "\"");
 		REPLACEMENTS.put("\"\\{", "{");
 		REPLACEMENTS.put("\\}\"", "}");
@@ -59,7 +61,7 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 	 * @return the cleaned-up Json string
 	 */
 	private String cleanupJson(String jsonString) {
-		for (Map.Entry<String, String> repl : REPLACEMENTS.entrySet()){
+		for (Map.Entry<String, String> repl : REPLACEMENTS.entrySet()) {
 			jsonString = jsonString.replaceAll(repl.getKey(), repl.getValue());
 		}
 		return jsonString;
@@ -68,7 +70,7 @@ public class SwaggerDefinitionsRefResolverSwagger implements SwaggerReferenceRes
 	/**
 	 * Resolves a Swagger reference with the given Swagger definitions.
 	 *
-	 * @param reference the Swagger reference
+	 * @param reference   the Swagger reference
 	 * @param definitions the Swagger definitions
 	 * @return the key-value representation of the Swagger reference
 	 */

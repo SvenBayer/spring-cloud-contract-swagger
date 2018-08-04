@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +33,8 @@ public class JsonFileResolverSwaggerTest {
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			resolver.resolveReference(new HashMap<>());
 		});
-		assertEquals("Swagger file must only referenceFile files that exist. Could not find file '/doesNotExist'", exception.getMessage());
+		assertThat(exception.getMessage(), startsWith("Swagger file must only referenceFile files that exist. Could not find file '"));
+		assertThat(exception.getMessage(), endsWith("doesNotExist'"));
 	}
 
 	@DisplayName("Should throw exception for directory")
@@ -43,7 +45,8 @@ public class JsonFileResolverSwaggerTest {
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			resolver.resolveReference(new HashMap<>());
 		});
-		assertEquals("Swagger file must only referenceFile files that exist. Could not find file '/target'", exception.getMessage());
+		assertThat(exception.getMessage(), startsWith("Swagger file must only referenceFile files that exist. Could not find file '"));
+		assertThat(exception.getMessage(), endsWith("target'"));
 	}
 
 	@DisplayName("Should ignore comparison if no Swagger definitions available")
