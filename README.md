@@ -1,14 +1,12 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/blog.svenbayer/spring-cloud-contract-swagger/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/blog.svenbayer/spring-cloud-contract-swagger)
-
-[![codecov](https://codecov.io/gh/SvenBayer/spring-cloud-contract-swagger/branch/master/graph/badge.svg)](https://codecov.io/gh/SvenBayer/spring-cloud-contract-swagger)
-
-[![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master)
-
-[Integration Tests ![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger-sample/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger-sample/tree/master)
-
+[![Javadocs](http://javadoc.io/badge/blog.svenbayer/spring-cloud-contract-swagger.svg?color=blue)](http://javadoc.io/doc/blog.svenbayer/spring-cloud-contract-swagger)
 [![Project Stats](https://www.openhub.net/p/spring-cloud-contract-swagger/widgets/project_thin_badge?format=gif&ref=Thin+badge)](https://www.openhub.net/p/spring-cloud-contract-swagger)
 
-[SonarQube](https://sonarcloud.io/dashboard?id=blog.svenbayer%3Aspring-cloud-contract-swagger)
+[**\[Unit Tests** ![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger/tree/master) 
+[**\[Integration Tests** ![CircleCI](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger-sample/tree/master.svg?style=svg)](https://circleci.com/gh/SvenBayer/spring-cloud-contract-swagger-sample/tree/master)
+
+[![codecov](https://codecov.io/gh/SvenBayer/spring-cloud-contract-swagger/branch/master/graph/badge.svg)](https://codecov.io/gh/SvenBayer/spring-cloud-contract-swagger)
+[**\[SonarQube\]**](https://sonarcloud.io/dashboard?id=blog.svenbayer%3Aspring-cloud-contract-swagger)
 
 # Spring Cloud Contract Swagger
 **Converts Swagger files to contracts for Spring Cloud Contract**
