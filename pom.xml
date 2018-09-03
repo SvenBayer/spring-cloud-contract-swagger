@@ -11,7 +11,7 @@
 
     <groupId>blog.svenbayer</groupId>
     <artifactId>spring-cloud-contract-swagger</artifactId>
-    <version>1.1.1.BUILD-SNAPSHOT</version>
+    <version>1.2.1.BUILD-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>blog.svenbayer:spring-cloud-contract-swagger</name>
@@ -45,7 +45,7 @@
     <properties>
         <lombok.addJavaxGeneratedAnnotation>true</lombok.addJavaxGeneratedAnnotation>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <spring-cloud-contract.version>2.0.0.RELEASE</spring-cloud-contract.version>
+        <spring-cloud-contract.version>2.0.1.RELEASE</spring-cloud-contract.version>
         <swagger-parser.version>1.0.36</swagger-parser.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
