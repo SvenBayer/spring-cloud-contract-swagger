@@ -1,4 +1,4 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/blog.svenbayer/spring-cloud-contract-swagger/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/blog.svenbayer/spring-cloud-contract-swagger)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/blog.svenbayer/spring-cloud-contract-swagger/badge.svg?style=plastic)](https://search.maven.org/search?q=g:blog.svenbayer%20AND%20a:spring-cloud-contract-swagger)
 [![Javadocs](http://javadoc.io/badge/blog.svenbayer/spring-cloud-contract-swagger.svg?color=blue)](http://javadoc.io/doc/blog.svenbayer/spring-cloud-contract-swagger)
 [![Project Stats](https://www.openhub.net/p/spring-cloud-contract-swagger/widgets/project_thin_badge?format=gif&ref=Thin+badge)](https://www.openhub.net/p/spring-cloud-contract-swagger)
 
