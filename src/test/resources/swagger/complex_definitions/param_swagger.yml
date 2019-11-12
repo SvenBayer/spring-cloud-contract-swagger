@@ -68,6 +68,20 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
+  /beans:
+    get:
+      summary: Gets coffee beans
+      tags:
+        - coffee
+        - bean
+      description: API endpoint to get all coffee beans
+      produces:
+        - application/json
+      responses:
+        200:
+          description: The list of coffee beans
+          schema:
+            $ref: '#/definitions/BeanPlanetList'
 definitions:
   Beanonaut:
     type: object
@@ -143,3 +157,7 @@ definitions:
           - 'BEAN'
         default: 'BEAN'
     title: BeanAsteroids
+  BeanPlanetList:
+    type: array
+    items:
+      $ref: '#/definitions/BeanPlanet'

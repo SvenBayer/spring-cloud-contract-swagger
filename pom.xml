@@ -11,7 +11,7 @@
 
     <groupId>blog.svenbayer</groupId>
     <artifactId>spring-cloud-contract-swagger</artifactId>
-    <version>1.2.1.BUILD-SNAPSHOT</version>
+    <version>1.2.2.BUILD-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>blog.svenbayer:spring-cloud-contract-swagger</name>
@@ -116,6 +116,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.0.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

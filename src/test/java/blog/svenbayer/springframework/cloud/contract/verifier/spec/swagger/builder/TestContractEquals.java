@@ -1,6 +1,8 @@
 package blog.svenbayer.springframework.cloud.contract.verifier.spec.swagger.builder;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.function.Executable;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.cloud.contract.spec.Contract;
 import org.springframework.cloud.contract.spec.internal.*;
 
@@ -189,7 +191,8 @@ public class TestContractEquals {
 		assertAll("header", headerExecutables.stream());
 	}
 
-	private static void assertPossiblePatternEquals(Object expected, Object actual, String msg) {
+	private static void assertPossiblePatternEquals(Object expected, Object actual, String msg)
+	{
 		if (expected instanceof Pattern) {
 			msg = msg + "Pattern:\n";
 			assertEquals(Pattern.class, actual.getClass(), msg);
@@ -216,14 +219,22 @@ public class TestContractEquals {
 		}
 	}
 
-	private static void assertEqualsNoLineSeparator(Object expected, Object actual, String msg) {
+	private static void assertEqualsNoLineSeparator(Object expected, Object actual, String msg)
+	{
 		if (expected == null) {
 			assertNull(actual, msg);
 		} else {
 			assertNotNull(actual, msg);
 			String cleanedUpExpected = expected.toString().replaceAll(LINE_SEPS, System.lineSeparator());
 			String cleanedUpActual = actual.toString().replaceAll(LINE_SEPS, System.lineSeparator());
-			assertEquals(cleanedUpExpected, cleanedUpActual, msg);
+			try
+			{
+				JSONAssert.assertEquals(cleanedUpExpected, cleanedUpActual, false);
+			}
+			catch (JSONException ex)
+			{
+				assertEquals(cleanedUpExpected, cleanedUpActual, msg);
+			}
 		}
 	}
 }

@@ -20,7 +20,37 @@ class ComplexSwaggerContractSpec extends Specification {
     def "should convert from single parametrized swagger to contract"() {
         given:
         File singleSwaggerYaml = new File(SwaggerContractConverterSpec.getResource("/swagger/complex_definitions/param_swagger.yml").toURI())
-        Contract expectedContract = Contract.make {
+        Contract expectedContractGet = Contract.make {
+            label("coffee_bean")
+            name("2_beans_GET")
+            description("API endpoint to get all coffee beans")
+            priority(2)
+            request {
+                method(GET())
+                urlPath("/coffee-rocket-service/v1.0/beans") {
+                    queryParameters {
+                        parameters []
+                    }
+                }
+                headers {}
+            }
+            response {
+                status(200)
+                headers {}
+                body(
+                        """[{
+  "asteroids" : [ {
+    "shape" : "BEAN",
+    "name" : "Phobos",
+    "speed" : 23
+  } ],
+  "size" : 6779,
+  "name" : "Mars"
+}]""")
+            }
+
+        }
+        Contract expectedContractPost = Contract.make {
             label("takeoff_coffee_bean_rocket")
             name("1_takeoff_POST")
             description("API endpoint to send a coffee rocket to a bean planet and returns the bean planet.")
@@ -73,6 +103,6 @@ class ComplexSwaggerContractSpec extends Specification {
         when:
         Collection<Contract> contracts = converter.convertFrom(singleSwaggerYaml)
         then:
-        testContractEquals.assertContractEquals(Collections.singleton(expectedContract), contracts)
+        testContractEquals.assertContractEquals(Arrays.asList(expectedContractPost, expectedContractGet), contracts)
     }
 }
