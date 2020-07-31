@@ -16,7 +16,7 @@ public class SwaggerDefinitionsRefResolverSwaggerTest {
 		SwaggerContractConverterException exception = assertThrows(SwaggerContractConverterException.class, () -> {
 			resolver.resolveReference(null);
 		});
-		assertEquals("Could not resolve reference '#invalid'", exception.getMessage());
+		assertEquals("Reference '#invalid' does not exist in definitions", exception.getMessage());
 
 	}
 }
